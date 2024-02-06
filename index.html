@@ -2,12 +2,43 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
+    <title>Login</title>
   </head>
+
   <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
+    <div class="auth_wrapper">
+      <form class="auth_form" id="auth_form">
+        <p>Вход</p>
+        <div class="input_group">
+          <label for="login">Логин</label>
+          <input placeholder="Login" name="login" id="login" />
+        </div>
+        <div class="input_group">
+          <label for="password">Пароль</label>
+          <input
+            type="password"
+            placeholder="Password"
+            name="password"
+            id="password"
+          />
+        </div>
+        <div class="auth_form_buttons">
+          {{>
+            button
+            label=button.login.label
+            buttonType=button.login.buttonType
+            buttonClass=button.login.buttonClass
+          }}
+          {{>
+            button
+            label=button.signIn.label
+            buttonType=button.signIn.buttonType
+            buttonClass=button.signIn.buttonClass
+          }}
+        </div>
+      </form>
+    </div>
+    <script src="src/pages/auth/auth-page.ts" type="module"></script>
+    <script src="src/utils/common-style.ts" type="module"></script>
   </body>
 </html>
