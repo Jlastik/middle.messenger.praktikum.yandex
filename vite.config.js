@@ -39,10 +39,7 @@ export default defineConfig({
   plugins: [
     handlebars({
       partialDirectory: resolve(__dirname, "src/components"),
-      context(pagePath) {
-        console.log(pagePath);
-        return pageData[pagePath];
-      },
+      context: (pagePath) => pageData[pagePath],
     }),
   ],
   css: {

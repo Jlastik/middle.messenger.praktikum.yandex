@@ -4,5 +4,9 @@
   "parserOptions": { "project": ["./tsconfig.json"] },
   "plugins": ["@typescript-eslint", "html"],
   "rules": {},
+  "env": {
+    "browser": true,
+    "node": true
+  },
   "ignorePatterns": ["dist", "vite.config.js", "postcss.config.js"]
 }
