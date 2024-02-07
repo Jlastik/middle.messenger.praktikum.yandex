@@ -1,5 +1,17 @@
-.main_container {
-  background: blue;
+.home_container {
+  height: 100%;
   display: flex;
-  flex-flow: column nowrap;
+  flex-flow: row nowrap;
+
+  & > div:first-of-type {
+    border: 1px solid red;
+    min-width: 200px;
+    width: 20%;
+  }
+
+  & > div:last-of-type {
+    border: 1px solid blue;
+    width: 80%;
+  }
 }
+
