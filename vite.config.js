@@ -12,6 +12,7 @@ export default defineConfig({
       input: {
         auth: resolve(__dirname, "home.html"),
         main: resolve(__dirname, "index.html"),
+        register: resolve(__dirname, "register.html"),
       },
     },
   },
