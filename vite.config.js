@@ -3,45 +3,29 @@ import { resolve } from "path";
 import autoprefixer from "autoprefixer";
 import postcssNested from "postcss-nested";
 import handlebars from "vite-plugin-handlebars";
+import { routes } from "./src/routes.js";
 
-const pageData = {
-  "/index.html": {
-    button: {
-      login: {
-        label: "Авторизоваться",
-        buttonClass: "solid",
-        buttonType: "submit",
-      },
-      signIn: {
-        label: "Нет Аккаунта?",
-        buttonClass: "outlined",
-        buttonType: "button",
-      },
-    },
-  },
-  "/home.html": {
-    title: "Sub Page",
-  },
-};
+const inputs = {};
+
+routes.forEach((el) => {
+  inputs[el.name] = el.file;
+});
+
+console.log(inputs);
 
 export default defineConfig({
   build: {
     target: "es2017",
     outDir: "build",
     rollupOptions: {
-      input: {
-        auth: resolve(__dirname, "home.html"),
-        main: resolve(__dirname, "index.html"),
-      },
+      input: inputs,
     },
   },
+  resolve: {
+    alias: [{ find: "src", replacement: resolve(__dirname, "src/") }],
+  },
   publicDir: "public",
-  plugins: [
-    handlebars({
-      partialDirectory: resolve(__dirname, "src/components"),
-      context: (pagePath) => pageData[pagePath],
-    }),
-  ],
+  plugins: [handlebars()],
   css: {
     postcss: {
       plugins: [autoprefixer, postcssNested],

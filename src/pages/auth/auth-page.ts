@@ -1,7 +1,27 @@
 import "./auth-page.pcss";
+import { createForm } from "./utils.ts";
+import {
+  AUTH_FORM_DATA,
+  AUTH_FORM_ID,
+  LOGIN_BTN_ID,
+  NO_ACC_BTN_ID,
+  REG_FORM_DATA,
+} from "./const.ts";
 
-const authForm = document.getElementById("auth_form") as HTMLFormElement;
+createForm({ root: "auth_form_container", formData: AUTH_FORM_DATA });
+createForm({ root: "reg_form_container", formData: REG_FORM_DATA });
 
+const noAccBtn = document.getElementById(NO_ACC_BTN_ID);
+if (noAccBtn) {
+  noAccBtn.addEventListener("click", () => window.open("/register", "_self"));
+}
+
+const loginBtn = document.getElementById(LOGIN_BTN_ID);
+if (loginBtn) {
+  loginBtn.addEventListener("click", () => window.open("/", "_self"));
+}
+
+const authForm = document.getElementById(AUTH_FORM_ID) as HTMLFormElement;
 if (authForm) {
   authForm.addEventListener("submit", (e) => {
     e.preventDefault();

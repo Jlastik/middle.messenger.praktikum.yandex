@@ -8,5 +8,10 @@
     "browser": true,
     "node": true
   },
-  "ignorePatterns": ["dist", "vite.config.js", "postcss.config.js"]
+  "ignorePatterns": [
+    "dist",
+    "vite.config.js",
+    "postcss.config.js",
+    "src/server.js"
+  ]
 }
