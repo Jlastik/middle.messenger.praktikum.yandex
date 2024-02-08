@@ -7,8 +7,51 @@
 
   <body>
     <div class="home_container">
-      <div>Chats</div>
-      <div>Messages</div>
+      <div class="chats_container">
+        <div class="chats_header">
+          <img class="user_avatar" src="/img/avatar.jpg" alt="avatar" />
+          <p>Андрей</p>
+        </div>
+        <div class="search_input_container">
+          <input class="search_input" placeholder="Поиск" />
+          <img src="/icons/search-icon.svg" alt="My Happy SVG" />
+        </div>
+        <div class="chats_list_container">
+          <div class="chat_item">
+            <img src="/img/avatar.jpg" alt="chat-avatar" />
+            <div class="chat_item_content">
+              <div class="chat_content_top">
+                <p class="chat_content_sender">Святослав</p>
+                <p class="chat_content_time">10:49</p>
+              </div>
+              <div class="chat_content_bottom">
+                <p class="chat_content_message">
+                  Знаешь, на такой классный фильм сходил, тебе обязательно стои
+                  его посмотерть
+                </p>
+                <div class="unread_indicator"><span>2</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="chats_list_container">
+          <div class="chat_item">
+            <img src="/img/no-image.png" alt="chat-avatar" />
+            <div class="chat_item_content">
+              <div class="chat_content_top">
+                <p class="chat_content_sender">Ибрагим</p>
+                <p class="chat_content_time">10:49</p>
+              </div>
+              <div class="chat_content_bottom">
+                <p class="chat_content_message">Ты уже видел этих котиков?</p>
+                <div class="unread_indicator"><span>1</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="divider"></div>
+      </div>
+      <div class="messages_container">Messages</div>
     </div>
     <script src="src/pages/home/home-page.ts" type="module"></script>
     <script src="src/utils/common-style.ts" type="module"></script>
