@@ -1,14 +1,14 @@
-import { Form, FormProps } from "src/components/form";
+import { AuthForm, AuthFormProps } from "src/components/auth-form";
 
 type CreateFormProps = {
   root: string;
-  formData: FormProps;
+  formData: AuthFormProps;
 };
 
 export const createForm = ({ root, formData }: CreateFormProps) => {
   const container = document.getElementById(root);
 
   if (container) {
-    container.innerHTML = Form(formData);
+    container.innerHTML = AuthForm(formData);
   }
 };

@@ -1,4 +1,4 @@
-import "./auth-page.pcss";
+import "./auth-page.css";
 import { createForm } from "./utils.ts";
 import {
   AUTH_FORM_DATA,
