@@ -15,4 +15,14 @@ export const routes = [
     path: "/profile",
     file: "profile.html",
   },
+  {
+    name: "profile",
+    path: "/error",
+    file: "error.html",
+  },
+  {
+    name: "profile",
+    path: "/notfound",
+    file: "notfound.html",
+  },
 ];
