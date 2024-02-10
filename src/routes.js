@@ -16,12 +16,12 @@ export const routes = [
     file: "profile.html",
   },
   {
-    name: "profile",
+    name: "error",
     path: "/error",
     file: "error.html",
   },
   {
-    name: "profile",
+    name: "notfound",
     path: "/notfound",
     file: "notfound.html",
   },
