@@ -2,6 +2,10 @@
 
 Простой, легковесный мессенджер для корпоративного общения
 
+### Дизайн - прототип
+
+https://www.figma.com/file/0XF5eQzYUhmTaf8eXzm4N6/Ya-Chatik?type=design&node-id=0%3A1&mode=design&t=CXvizAAE6QNO9JYy-1
+
 ### Роутинг приложения 
 
 - **/** — Страница авторизации
