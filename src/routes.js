@@ -10,4 +10,9 @@ export const routes = [
     path: "/register",
     file: "register.html",
   },
+  {
+    name: "profile",
+    path: "/profile",
+    file: "profile.html",
+  },
 ];

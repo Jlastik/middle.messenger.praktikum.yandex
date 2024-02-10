@@ -1,4 +1,5 @@
 import { Button } from "src/components/button";
+import { Input } from "../../components/input/input.ts";
 
 export const AUTH_FORM_ID = "auth_form";
 export const REG_FORM_ID = "register_form";
@@ -25,8 +26,13 @@ export const AUTH_FORM_DATA = {
   formId: AUTH_FORM_ID,
   formLabel: "Авторизация",
   inputs: [
-    { id: "login", name: "login", placeholder: "Логин" },
-    { id: "password", name: "password", placeholder: "Пароль" },
+    Input({ id: "login", name: "login", label: "Логин", placeholder: "Логин" }),
+    Input({
+      id: "password",
+      name: "password",
+      label: "Пароль",
+      placeholder: "Пароль",
+    }),
   ],
   buttons: `${authBtn}${noAccBtn}`,
 };
@@ -48,12 +54,37 @@ export const REG_FORM_DATA = {
   formId: REG_FORM_ID,
   formLabel: "Регистрация",
   inputs: [
-    { id: "first_name", name: "first_name", placeholder: "Имя" },
-    { id: "second_name", name: "second_name", placeholder: "Фамилия" },
-    { id: "login", name: "login", placeholder: "Никнейм" },
-    { id: "email", name: "email", placeholder: "Почта" },
-    { id: "password", name: "password", placeholder: "Пароль" },
-    { id: "phone", name: "phone", placeholder: "Телефон" },
+    Input({
+      id: "first_name",
+      name: "first_name",
+      label: "Имя",
+      placeholder: "Имя",
+    }),
+    Input({
+      id: "second_name",
+      name: "second_name",
+      label: "Фамилия",
+      placeholder: "Фамилия",
+    }),
+    Input({
+      id: "login",
+      name: "login",
+      label: "Никнейм",
+      placeholder: "Никнейм",
+    }),
+    Input({ id: "email", name: "email", label: "Почта", placeholder: "Почта" }),
+    Input({
+      id: "password",
+      name: "password",
+      label: "Пароль",
+      placeholder: "Пароль",
+    }),
+    Input({
+      id: "phone",
+      name: "phone",
+      label: "Телефон",
+      placeholder: "Телефон",
+    }),
   ],
   buttons: `${regBtn}${loginBtn}`,
 };

@@ -4,7 +4,7 @@ import Handlebars from "handlebars";
 export const Button = (params: {
   id: string;
   type: "submit" | "reset" | "button";
-  class: "solid" | "outlined";
+  class: string;
   label: string;
 }) => {
   return Handlebars.compile(buttonTmpl)(params);
