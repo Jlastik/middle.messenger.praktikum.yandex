@@ -57,6 +57,7 @@ const createUserEditInputs = () => {
 
     const profileSaveBtn = document.getElementById("profile_save_btn");
     if (profileSaveBtn) {
+      profileSaveBtn.setAttribute("form", "profile_data");
       profileSaveBtn.addEventListener("click", () => {
         createUserData();
       });

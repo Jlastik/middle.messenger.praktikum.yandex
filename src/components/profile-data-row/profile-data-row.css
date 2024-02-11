@@ -4,16 +4,16 @@
   display: flex;
   justify-content: space-between;
   & > input {
-    color: #5d5d5d;
+    color: var(--gray-700);
     font-weight: 400;
     text-align: right;
     border-radius: 0;
     &:disabled {
-      color: #b2b2b2;
+      color: var(--gray-400);
     }
   }
   &:not(:last-of-type) {
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid var(--gray-200);
     margin-bottom: 6px;
     padding-bottom: 6px;
   }

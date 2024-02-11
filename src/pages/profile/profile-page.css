@@ -7,14 +7,14 @@
 .profile_back_container {
   transition: all 0.25s;
   cursor: pointer;
-  background-color: #fbfbfb;
-  border-right: 1px solid #eaeaea;
+  background-color: var(--gray-100);
+  border-right: 1px solid var(--gray-200);
   display: flex;
   align-items: center;
   padding: 10px;
 
   &:hover {
-    background-color: #eaeaea;
+    background-color: var(--gray-200);
   }
 }
 
@@ -50,7 +50,7 @@
     justify-content: center;
     opacity: 0;
     background-color: rgba(0, 0, 0, 0.55);
-    color: #f8f8f8;
+    color: white;
     font-size: 14px;
   }
   &:hover .avatar_backdrop {

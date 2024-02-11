@@ -39,7 +39,7 @@ export const EXIT_BTN_TMPL = Button({
 });
 export const SAVE_BTN_TMPL = Button({
   id: "profile_save_btn",
-  type: "button",
+  type: "submit",
   class: "solid",
   label: "Сохранить",
 });

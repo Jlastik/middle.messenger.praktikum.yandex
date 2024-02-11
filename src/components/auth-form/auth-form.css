@@ -24,21 +24,21 @@
 
   &_error {
     font-size: 12px;
-    color: #ff2f2f;
+    color: var(--red-500);
   }
 
   & > label {
-    color: #424242;
+    color: var(--gray-700);
     font-size: 14px;
     margin-bottom: 4px;
   }
   & > input {
     padding: 12px 16px;
     transition: border-color 0.25s;
-    border: 1px solid #ccc;
+    border: 1px solid var(--gray-200);
   }
   & > input:focus {
-    border-color: #3369f3;
+    border-color: var(--blue-500);
   }
 }
 

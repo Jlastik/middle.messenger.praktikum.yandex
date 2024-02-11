@@ -11,8 +11,6 @@ routes.forEach((el) => {
   inputs[el.name] = el.file;
 });
 
-console.log(inputs);
-
 export default defineConfig({
   build: {
     target: "es2017",
@@ -28,7 +26,7 @@ export default defineConfig({
   plugins: [handlebars()],
   css: {
     postcss: {
-      plugins: [autoprefixer, postcssNested],
+      plugins: [autoprefixer(), postcssNested],
     },
   },
 });
