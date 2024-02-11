@@ -1,0 +1,23 @@
+{
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": { "project": ["./tsconfig.json"], "extraFileExtensions": [".pcss"] },
+  "plugins": ["@typescript-eslint", "html"],
+  "rules": {},
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "overrides": [
+    {
+      "files": ["*.pcss"],
+      "extends": ["plugin:@typescript-eslint/disable-type-checked"]
+    }
+  ],
+  "ignorePatterns": [
+    "dist",
+    "vite.config.js",
+    "postcss.config.js",
+    "src/server.js"
+  ]
+}
