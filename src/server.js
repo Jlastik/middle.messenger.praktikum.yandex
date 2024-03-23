@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import { routes } from "./routes.js";
+import { routes } from "./router.ts";
 import { resolve } from "path";
 
 const app = express();
