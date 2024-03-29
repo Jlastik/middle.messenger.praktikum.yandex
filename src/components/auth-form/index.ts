@@ -7,6 +7,7 @@ export type FormProps = {
   inputs: Block[];
   buttons: Block[];
   formState: Record<string, string>;
+  class?: string;
 };
 
 export default class AuthForm extends Block {
@@ -16,7 +17,7 @@ export default class AuthForm extends Block {
 
   render() {
     return `
-        <form class="auth_form" id="{{formId}}">
+        <form class="{{#if this.class}} {{this.class}} {{/if}}" id="{{formId}}">
           <p>{{formLabel}}</p>
             {{{ inputs }}}
           <div class="auth_form_buttons">{{{ buttons }}}</div>

@@ -6,7 +6,7 @@ export type BlockPropsType = {
   events?: Record<string, (e: Event) => void>;
 } & Record<string, unknown>;
 
-class Block {
+abstract class Block {
   props: BlockPropsType;
   lists: Record<string, unknown[]>;
   children: Record<string, Block>;
@@ -22,11 +22,10 @@ class Block {
   _element: HTMLElement | null = null;
   _id = Math.floor(100000 + Math.random() * 900000);
 
-  constructor(propsWithChildren: BlockPropsType = {}) {
+  protected constructor(propsWithChildren: BlockPropsType = {}) {
     const eventBus = new EventBus();
     const { props, children, lists } =
       this._getChildrenPropsAndProps(propsWithChildren);
-
     this.children = children;
     this.lists = lists;
     this.props = this._makePropsProxy({ ...props });
@@ -88,8 +87,17 @@ class Block {
     newProps: Record<string, unknown>,
   ) {
     const response = this.componentDidUpdate(oldProps, newProps);
+
     if (response) {
-      console.log("Update component", newProps);
+      const { props, children, lists } = this._getChildrenPropsAndProps({
+        ...this.props,
+        ...this.lists,
+        ...this.children,
+        ...newProps,
+      });
+      this.props = this._makePropsProxy({ ...props });
+      this.children = children;
+      this.lists = lists;
       this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
     }
   }
@@ -100,6 +108,9 @@ class Block {
     newProps: Record<string, unknown>,
   ) {
     let update = false;
+    if (Object.keys(oldProps).length !== Object.keys(newProps).length) {
+      update = true;
+    }
     Object.entries(oldProps).forEach(([key, value]) => {
       if (newProps[key] !== value || typeof newProps[key] === "undefined") {
         update = true;
@@ -174,11 +185,9 @@ class Block {
     });
 
     this._replaceStubs(fragment, _tmpId);
-    // console.log(fragment.innerHTML);
 
     //Получаем весь компонент
     const newElement = fragment.content.firstElementChild as HTMLElement;
-    console.log("newElement: ", newElement);
     if (this._element && newElement) {
       this._element.replaceWith(newElement);
     }
@@ -204,6 +213,7 @@ class Block {
       set(target, prop, value) {
         const oldProps = { ...target };
         target[prop as string] = value;
+        console.log(oldProps, target);
         self.eventBus().emit(Block.EVENTS.FLOW_UPDATE, oldProps, target);
         return true;
       },

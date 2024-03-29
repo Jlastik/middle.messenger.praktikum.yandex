@@ -1,9 +1,9 @@
-import Block, { BlockPropsType } from "../../utils/block.ts";
+import Block, { BlockPropsType } from "src/utils/block.ts";
 
 type ButtonProps = {
   id: string;
   type: "submit" | "reset" | "button";
-  class: "solid" | "outlined";
+  class: "solid" | "outlined" | "error";
   label: string;
 };
 export default class Button extends Block {

@@ -8,7 +8,7 @@ import {
   nameValidation,
   passwordValidation,
   phonedValidation,
-} from "../../utils/inputValidation.ts";
+} from "src/utils/inputValidation.ts";
 import {
   Email,
   FirstName,
@@ -20,17 +20,17 @@ import {
 } from "./const.ts";
 
 class RegPage extends Block {
-  form: AuthForm;
-  nameInput;
-  secondNameInput;
-  loginInput;
-  passInput;
-  phoneInput;
-  emailInput;
-
+  signInBtn;
+  signUpBtn;
+  first_name;
+  second_name;
+  login;
+  email;
+  password;
+  phone;
+  form;
   constructor() {
     const { signUp, signIn } = REG_BUTTONS;
-
     const first_name = FirstName({
       change: (e) => this.onChange(e, "first_name"),
       blur: (e) =>
@@ -62,6 +62,7 @@ class RegPage extends Block {
     const form = new AuthForm({
       formId: "reg_form",
       formLabel: "Регистрация",
+      class: "auth_form",
       inputs: [first_name, second_name, login, email, password, phone],
       buttons: [signUp, signIn],
       formState: {},
@@ -69,16 +70,18 @@ class RegPage extends Block {
         submit: (e) => this.onSubmit(e),
       },
     });
+
     super({ form });
 
+    this.signInBtn = signIn;
+    this.signUpBtn = signUp;
+    this.first_name = first_name;
+    this.second_name = second_name;
+    this.login = login;
+    this.email = email;
+    this.password = password;
+    this.phone = phone;
     this.form = form;
-
-    this.nameInput = first_name;
-    this.secondNameInput = second_name;
-    this.loginInput = login;
-    this.passInput = password;
-    this.phoneInput = phone;
-    this.emailInput = email;
   }
 
   onSubmit(e: Event) {
@@ -95,45 +98,45 @@ class RegPage extends Block {
 
     if (!nameValidation(first_name)) {
       hasErrors = true;
-      this.nameInput.setProps({
+      this.first_name.setProps({
         error: true,
         errorText: FORM_ERRORS.first_name,
       });
     } else {
-      this.nameInput.setProps({ error: false, errorText: "" });
+      this.first_name.setProps({ error: false, errorText: "" });
     }
     if (!nameValidation(second_name)) {
       hasErrors = true;
-      this.secondNameInput.setProps({
+      this.second_name.setProps({
         error: true,
         errorText: FORM_ERRORS.second_name,
       });
     } else {
-      this.secondNameInput.setProps({ error: false, errorText: "" });
+      this.second_name.setProps({ error: false, errorText: "" });
     }
     if (!loginValidation(login)) {
       hasErrors = true;
-      this.loginInput.setProps({ error: true, errorText: FORM_ERRORS.login });
+      this.login.setProps({ error: true, errorText: FORM_ERRORS.login });
     } else {
-      this.loginInput.setProps({ error: false, errorText: "" });
+      this.login.setProps({ error: false, errorText: "" });
     }
     if (!emailValidation(email)) {
       hasErrors = true;
-      this.emailInput.setProps({ error: true, errorText: FORM_ERRORS.email });
+      this.email.setProps({ error: true, errorText: FORM_ERRORS.email });
     } else {
-      this.emailInput.setProps({ error: false, errorText: "" });
+      this.email.setProps({ error: false, errorText: "" });
     }
     if (!passwordValidation(password)) {
       hasErrors = true;
-      this.passInput.setProps({ error: true, errorText: FORM_ERRORS.password });
+      this.password.setProps({ error: true, errorText: FORM_ERRORS.password });
     } else {
-      this.passInput.setProps({ error: false, errorText: "" });
+      this.password.setProps({ error: false, errorText: "" });
     }
     if (!phonedValidation(phone)) {
       hasErrors = true;
-      this.phoneInput.setProps({ error: true, errorText: FORM_ERRORS.phone });
+      this.phone.setProps({ error: true, errorText: FORM_ERRORS.phone });
     } else {
-      this.phoneInput.setProps({ error: false, errorText: "" });
+      this.phone.setProps({ error: false, errorText: "" });
     }
 
     if (hasErrors) {
@@ -147,49 +150,49 @@ class RegPage extends Block {
     switch (name) {
       case "first_name":
         nameValidation(value)
-          ? this.nameInput.setProps({ error: false, errorText: "" })
-          : this.nameInput.setProps({
+          ? this.first_name.setProps({ error: false, errorText: "" })
+          : this.first_name.setProps({
               error: true,
               errorText: FORM_ERRORS.first_name,
             });
         return;
       case "second_name":
         nameValidation(value)
-          ? this.secondNameInput.setProps({ error: false, errorText: "" })
-          : this.secondNameInput.setProps({
+          ? this.second_name.setProps({ error: false, errorText: "" })
+          : this.second_name.setProps({
               error: true,
               errorText: FORM_ERRORS.second_name,
             });
         return;
       case "login":
         loginValidation(value)
-          ? this.loginInput.setProps({ error: false, errorText: "" })
-          : this.loginInput.setProps({
+          ? this.login.setProps({ error: false, errorText: "" })
+          : this.login.setProps({
               error: true,
               errorText: FORM_ERRORS.login,
             });
         return;
       case "password":
         passwordValidation(value)
-          ? this.passInput.setProps({ error: false, errorText: "" })
-          : this.passInput.setProps({
+          ? this.password.setProps({ error: false, errorText: "" })
+          : this.password.setProps({
               error: true,
               errorText: FORM_ERRORS.password,
             });
         return;
       case "phone":
-        console.log(value, this.phoneInput.props);
+        console.log(value, this.phone.props);
         phonedValidation(value)
-          ? this.phoneInput.setProps({ error: false, errorText: "" })
-          : this.phoneInput.setProps({
+          ? this.phone.setProps({ error: false, errorText: "" })
+          : this.phone.setProps({
               error: true,
               errorText: FORM_ERRORS.phone,
             });
         return;
       case "email":
         emailValidation(value)
-          ? this.emailInput.setProps({ error: false, errorText: "" })
-          : this.emailInput.setProps({
+          ? this.email.setProps({ error: false, errorText: "" })
+          : this.email.setProps({
               error: true,
               errorText: FORM_ERRORS.email,
             });

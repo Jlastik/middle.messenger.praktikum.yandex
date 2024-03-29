@@ -1,8 +1,14 @@
-import Block from "src/utils/block.ts";
+import "./style.pcss";
+import Block, { BlockPropsType } from "src/utils/block.ts";
 
+type MessageProps = {
+  text: string;
+  date_send: string;
+  is_right: boolean;
+};
 export class Message extends Block {
-  constructor() {
-    super();
+  constructor(props: BlockPropsType & MessageProps) {
+    super(props);
   }
 
   render() {

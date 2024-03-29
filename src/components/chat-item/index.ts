@@ -1,4 +1,5 @@
-import Block, { BlockPropsType } from "../../utils/block.ts";
+import "./style.pcss";
+import Block, { BlockPropsType } from "src/utils/block.ts";
 
 type ChatItemProps = {
   avatar: string;

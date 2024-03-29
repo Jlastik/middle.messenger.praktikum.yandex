@@ -1,0 +1,29 @@
+.messages_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--gray-200);
+    padding-bottom: 10px;
+}
+
+.messages_header_name {
+    display: flex;
+    align-items: center;
+    & > img {
+        margin-right: 10px;
+    }
+}
+
+.messages_header_menu {
+    transition: all 0.25s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 4px;
+    box-sizing: content-box;
+    border-radius: 8px;
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+}

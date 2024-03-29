@@ -1,11 +1,12 @@
-import Block, { BlockPropsType } from "../../utils/block.ts";
+import Block, { BlockPropsType } from "src/utils/block.ts";
 
-type InputProps = {
+interface InputProps {
   id: string;
   name: string;
   placeholder: string;
   class?: string;
-};
+  value?: string;
+}
 
 export class Input extends Block {
   constructor(props: BlockPropsType & InputProps) {

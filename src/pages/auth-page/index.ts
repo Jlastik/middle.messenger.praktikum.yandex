@@ -58,6 +58,7 @@ class AuthPage extends Block {
     const form = new AuthForm({
       formId: "auth_form",
       formLabel: "Авторизация",
+      class: "auth_form",
       inputs: [loginInputGroup, passInputGroup],
       buttons: [AuthBtn, NoAccBtn],
       formState: {},
