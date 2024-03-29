@@ -1,14 +1,14 @@
 import { EventBus } from "./event-bus.ts";
 import Handlebars from "handlebars";
 
-interface IBlock {}
-
+export type EventType = Record<string, (e: Event) => void>;
 export type BlockPropsType = {
   events?: Record<string, (e: Event) => void>;
 } & Record<string, unknown>;
 
-class Block implements IBlock {
+class Block {
   props: BlockPropsType;
+  lists: Record<string, unknown[]>;
   children: Record<string, Block>;
   eventBus: () => EventBus;
 
@@ -24,10 +24,11 @@ class Block implements IBlock {
 
   constructor(propsWithChildren: BlockPropsType = {}) {
     const eventBus = new EventBus();
-    const { props, children } =
+    const { props, children, lists } =
       this._getChildrenPropsAndProps(propsWithChildren);
 
     this.children = children;
+    this.lists = lists;
     this.props = this._makePropsProxy({ ...props });
     this.eventBus = () => eventBus;
     this._registerEvents(eventBus);
@@ -63,19 +64,19 @@ class Block implements IBlock {
   _getChildrenPropsAndProps(propsWithChildren: BlockPropsType) {
     const children: Record<string, Block> = {};
     const props: BlockPropsType = {};
-    // const lists = {};
+    const lists: Record<string, unknown[]> = {};
 
     Object.entries(propsWithChildren).forEach(([key, value]) => {
       if (value instanceof Block) {
         children[key] = value;
-        // } else if (Array.isArray(value)) {
-        //   lists[key] = value;
+      } else if (Array.isArray(value)) {
+        lists[key] = value;
       } else {
         props[key] = value;
       }
     });
 
-    return { children, props };
+    return { children, props, lists };
   }
 
   dispatchComponentDidMount() {
@@ -88,6 +89,7 @@ class Block implements IBlock {
   ) {
     const response = this.componentDidUpdate(oldProps, newProps);
     if (response) {
+      console.log("Update component", newProps);
       this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
     }
   }
@@ -97,8 +99,13 @@ class Block implements IBlock {
     oldProps: Record<string, unknown>,
     newProps: Record<string, unknown>,
   ) {
-    console.log("componentDidUpdate: ", oldProps, newProps);
-    return true;
+    let update = false;
+    Object.entries(oldProps).forEach(([key, value]) => {
+      if (newProps[key] !== value || typeof newProps[key] === "undefined") {
+        update = true;
+      }
+    });
+    return update;
   }
 
   setProps = (nextProps: Record<string, unknown>) => {
@@ -112,31 +119,20 @@ class Block implements IBlock {
     return this._element;
   }
 
-  _render() {
-    const props = { ...this.props };
+  _createStubsInComponent(id: number) {
     const stubs: Record<string, string> = {};
 
-    // Object.entries(this.lists).forEach(([key, child]) => {
-    //   console.log(`${child._id}`);
-    //   props[key] = `<div data-id="__l_${_tmpId}"></div>`;
-    // });
-
-    //Создание в текущем компоненте заглушки для рендера дочерних компонентов
+    Object.entries(this.lists).forEach(([key]) => {
+      stubs[key] = `<div data-id="__l_${id}"></div>`;
+    });
     Object.entries(this.children).forEach(([key, child]) => {
       stubs[key] = `<div data-id="${child._id}"></div>`;
     });
 
-    //Создаем заглушку компонента и формируем с помощью шаблонизатора html
-    const fragment = this._createDocumentElement(
-      "template",
-    ) as HTMLTemplateElement;
-    fragment.innerHTML = Handlebars.compile(this.render())({
-      ...props,
-      ...stubs,
-    });
-
-    console.log("Fragment HTML: ", fragment.innerHTML);
-
+    return stubs;
+  }
+  _replaceStubs(fragment: HTMLTemplateElement, id: number) {
+    //Заменяем заглушки на html
     Object.values(this.children).forEach((child) => {
       //Получаем элемент из заглушки
       const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
@@ -145,8 +141,44 @@ class Block implements IBlock {
       childHtml && stub && stub.replaceWith(childHtml);
     });
 
+    //Заменяем заглушки списков отрендереными компонентами
+    Object.entries(this.lists).forEach((item) => {
+      const listCont = this._createDocumentElement(
+        "template",
+      ) as HTMLTemplateElement;
+
+      item[1].forEach((listItem) => {
+        if (listItem instanceof Block) {
+          const el = listItem.getContent();
+          el && listCont.content.append(el);
+        } else {
+          listCont.content.append(`${listItem}`);
+        }
+      });
+      const stub = fragment.content.querySelector(`[data-id="__l_${id}"]`);
+      stub && stub.replaceWith(listCont.content);
+    });
+  }
+  _render() {
+    const props = { ...this.props };
+    const _tmpId = Math.floor(100000 + Math.random() * 900000);
+    const stubs = this._createStubsInComponent(_tmpId);
+
+    //Создаем фрагмент компонента с заглушками и формируем с помощью шаблонизатора
+    const fragment = this._createDocumentElement(
+      "template",
+    ) as HTMLTemplateElement;
+    fragment.innerHTML = Handlebars.compile(this.render())({
+      ...props,
+      ...stubs,
+    });
+
+    this._replaceStubs(fragment, _tmpId);
+    // console.log(fragment.innerHTML);
+
     //Получаем весь компонент
     const newElement = fragment.content.firstElementChild as HTMLElement;
+    console.log("newElement: ", newElement);
     if (this._element && newElement) {
       this._element.replaceWith(newElement);
     }

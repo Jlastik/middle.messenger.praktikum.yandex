@@ -1,5 +1,5 @@
-import Block from "./utils/block.ts";
 import "./global.pcss";
+import Block from "./utils/block.ts";
 import { router } from "./router.ts";
 
 function render(query: string, block: Block | null) {
@@ -8,12 +8,13 @@ function render(query: string, block: Block | null) {
   if (root && element) {
     root.appendChild(element);
     //Зачем?
-    // block.dispatchComponentDidMount();
+    block && block.dispatchComponentDidMount();
   }
   return root;
 }
 
 const currentPath = window.location.pathname;
+
 console.log(currentPath);
 
 render("#app", router.find((el) => el.path === currentPath)?.element || null);
