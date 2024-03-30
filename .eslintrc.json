@@ -9,15 +9,16 @@
     "node": true
   },
   "overrides": [
-    {
-      "files": ["*.pcss"],
-      "extends": ["plugin:@typescript-eslint/disable-type-checked"]
-    }
+//    {
+//      "files": ["*.pcss"],
+//      "extends": ["plugin:@typescript-eslint/disable-type-checked"]
+//    }
   ],
   "ignorePatterns": [
     "dist",
     "vite.config.js",
     "postcss.config.js",
-    "src/server.js"
+    "src/server.js",
+    "**/*.css"
   ]
 }

@@ -2,35 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-    />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Андрей</title>
+    <title>Авторизация</title>
   </head>
+
   <body>
-    <div class="profile_container">
-      <section id="profile_back_container" class="profile_back_container">
-        <img src="/img/back-btn.png" alt="back" />
-      </section>
-      <section class="profile_content_container">
-        <div class="profile_content">
-          <div class="profile_avatar_container">
-            <img class="profile_avatar" src="/img/avatar.jpg" alt="avatar" />
-            <div class="avatar_backdrop">
-              <p>Изменить</p>
-            </div>
-          </div>
-          <p class="profile_name">Андрей</p>
-
-          <div id="profile_data" class="profile_data"></div>
-
-          <div id="profile_controllers" class="profile_controllers"></div>
-        </div>
-      </section>
-    </div>
-    <script src="src/pages/profile/profile-page.ts" type="module"></script>
-    <script src="src/utils/global.ts" type="module"></script>
+    <div id="app"></div>
+    <script type="module" src="src/app.ts"></script>
   </body>
 </html>
