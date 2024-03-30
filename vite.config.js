@@ -10,7 +10,7 @@ export default defineConfig({
       input: {
         auth: "index.html",
         main: "home.html",
-        register: "register.html",
+        register: "registration.html",
         profile: "profile.html",
         error: "error.html",
         notfound: "notfound.html",
