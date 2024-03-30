@@ -86,6 +86,7 @@ class RegPage extends Block {
 
   onSubmit(e: Event) {
     e.preventDefault();
+
     const {
       first_name = "",
       second_name = "",

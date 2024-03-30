@@ -213,7 +213,6 @@ abstract class Block {
       set(target, prop, value) {
         const oldProps = { ...target };
         target[prop as string] = value;
-        console.log(oldProps, target);
         self.eventBus().emit(Block.EVENTS.FLOW_UPDATE, oldProps, target);
         return true;
       },

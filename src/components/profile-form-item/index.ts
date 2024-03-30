@@ -1,23 +1,41 @@
 import "./style.pcss";
 import Block, { BlockPropsType } from "src/utils/block.ts";
+import { Input } from "../input";
 
 type ProfileFormItemProps = {
   label: string;
   name: string;
   value: string;
   disabled: boolean;
+  onBlur: (value: string, name: string) => void;
 };
 export class ProfileFormItem extends Block {
+  rowInput;
   constructor(props: BlockPropsType & ProfileFormItemProps) {
-    super({ ...props });
+    const rowInput = new Input({
+      id: "",
+      value: props.value,
+      name: props.name,
+      placeholder: "",
+      disabled: props.disabled,
+      class: "",
+      events: {
+        blur: (e) =>
+          props.onBlur((e.target as HTMLInputElement).value, props.name),
+      },
+    });
+
+    super({ ...props, rowInput: rowInput });
+
+    this.rowInput = rowInput;
   }
 
   render() {
     return `
-        <p class="profile_data_row">
+        <div class="profile_data_row">
             <label>{{label}}</label>
-            <input {{#if disabled}}disabled{{/if}} name="{{name}}" value="{{value}}" />
-        </p>
+           {{{ this.rowInput }}}
+        </div>
     `;
   }
 }

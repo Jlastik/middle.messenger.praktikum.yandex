@@ -8,10 +8,12 @@
     transition: all 0.25s;
     border-radius: 10px;
     color: var(--gray-500);
+
     &:hover {
         background-color: var(--gray-100);
     }
-    & > p:after {
+
+    & > p::after {
         content: "->";
         position: absolute;
         right: 20px;
@@ -20,7 +22,8 @@
         transition: all 0.25s;
         opacity: 0;
     }
-    &:hover p:after {
+
+    &:hover p::after {
         opacity: 1;
     }
 }

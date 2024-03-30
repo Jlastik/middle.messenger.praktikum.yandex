@@ -22,6 +22,27 @@ export const phonedValidation = (str: string) => {
   return !!str.match(regName);
 };
 
+export const validateByName = (value: string, name: string) => {
+  if (name === "first_name") {
+    return nameValidation(value);
+  }
+  if (name === "last_name") {
+    return nameValidation(value);
+  }
+  if (name === "login") {
+    return loginValidation(value);
+  }
+  if (name === "password") {
+    return passwordValidation(value);
+  }
+  if (name === "email") {
+    return emailValidation(value);
+  }
+  if (name === "phone") {
+    return phonedValidation(value);
+  }
+};
+
 export const FORM_ERRORS = {
   first_name: "Буквы с заглавной буквы, без пробелов",
   second_name: "Буквы с заглавной буквы, без пробелов",
