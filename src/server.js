@@ -5,7 +5,7 @@ import { router } from "./router.js";
 import { resolve } from "path";
 
 const app = express();
-const PORT = 4000;
+const PORT = 3000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,8 +16,6 @@ router.forEach((route) =>
   }),
 );
 
-app.use(express.static("./build"));
-
 app.listen(PORT, function () {
-  console.log(`Example app listening on port ${PORT}!`);
+  console.log(`Мессенджер был успешно запущен на порту ${PORT}!`);
 });

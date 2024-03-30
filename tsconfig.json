@@ -19,7 +19,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "baseUrl": "./",
-    "types": ["vite/client"]
+    "types": ["vite/client"],
   },
 //  "include": ["src"]
 }
