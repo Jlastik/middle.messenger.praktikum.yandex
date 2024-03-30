@@ -7,6 +7,9 @@ export default defineConfig({
     target: "es2017",
     outDir: "build",
   },
+  preview: {
+    port: 3000,
+  },
   resolve: {
     alias: [{ find: "src", replacement: resolve(__dirname, "src/") }],
   },
