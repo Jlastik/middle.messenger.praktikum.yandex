@@ -1,12 +1,28 @@
-import inputTmpl from "./input.hbs?raw";
-import Handlebars from "handlebars";
+import Block, { BlockPropsType } from "src/utils/block.ts";
 
-type InputProps = {
-  id: string;
+interface InputProps {
+  id?: string;
   name: string;
-  label: string;
   placeholder: string;
-};
-export const Input = (params: InputProps) => {
-  return Handlebars.compile(inputTmpl)(params);
-};
+  class?: string;
+  value?: string;
+  disabled?: boolean;
+}
+
+export class Input extends Block {
+  constructor(props: BlockPropsType & InputProps) {
+    super(props);
+  }
+
+  render() {
+    return `
+        <input 
+            id="{{this.id}}"
+            name="{{this.name}}"
+            placeholder="{{this.placeholder}}"
+            {{#if this.class}}class="{{this.class}}"{{/if}}
+            {{#if this.value}}value="{{this.value}}"{{/if}} 
+            {{#if disabled}}disabled{{/if}} />
+    `;
+  }
+}

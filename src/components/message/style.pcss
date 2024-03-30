@@ -1,0 +1,27 @@
+.message {
+    width: fit-content;
+    max-width: 50%;
+    padding: 10px;
+    border-radius: 10px 10px 0;
+    background-color: var(--gray-100);
+
+    &_text {
+        font-size: 12px;
+        color: var(--gray-900);
+    }
+
+    &_time {
+        text-align: end;
+        font-size: 10px;
+        color: var(--gray-400);
+    }
+}
+
+.message_right {
+    align-self: flex-end;
+    background-color: var(--blue-100);
+}
+
+.message:not(:first-of-type) {
+    margin-bottom: 10px;
+}

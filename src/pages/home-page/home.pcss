@@ -1,0 +1,31 @@
+.home_container {
+  height: 100vh;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.chats_container {
+  padding: 10px 10px 0;
+  background-color: var(--gray-50);
+  border-right: 2px solid var(--gray-200);
+  min-width: 300px;
+  width: 300px;
+  box-sizing: border-box;
+}
+
+.messages_container {
+  width: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  padding: 10px 20px;
+}
+
+.messages_main {
+  flex-grow: 1;
+  display: flex;
+  flex-flow: column-reverse nowrap;
+  padding: 20px 0;
+  overflow: auto;
+}
+
+

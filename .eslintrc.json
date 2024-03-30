@@ -1,8 +1,8 @@
 {
-  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:css/recommended"],
   "parser": "@typescript-eslint/parser",
-  "parserOptions": { "project": ["./tsconfig.json"], "extraFileExtensions": [".pcss"] },
-  "plugins": ["@typescript-eslint", "html"],
+  "parserOptions": { "project": ["./tsconfig.json"] },
+  "plugins": ["@typescript-eslint", "html", "css"],
   "rules": {},
   "env": {
     "browser": true,
