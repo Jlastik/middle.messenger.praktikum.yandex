@@ -1,36 +1,36 @@
 .chats_header {
-    position: relative;
-    cursor: pointer;
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    padding: 4px;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  padding: 4px;
+  transition: all 0.25s;
+  border-radius: 10px;
+  color: var(--gray-500);
+
+  &:hover {
+    background-color: var(--gray-100);
+  }
+
+  & > p::after {
+    content: "->";
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
     transition: all 0.25s;
-    border-radius: 10px;
-    color: var(--gray-500);
+    opacity: 0;
+  }
 
-    &:hover {
-        background-color: var(--gray-100);
-    }
-
-    & > p::after {
-        content: "->";
-        position: absolute;
-        right: 20px;
-        top: 50%;
-        transform: translateY(-50%);
-        transition: all 0.25s;
-        opacity: 0;
-    }
-
-    &:hover p::after {
-        opacity: 1;
-    }
+  &:hover p::after {
+    opacity: 1;
+  }
 }
 
 .user_avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    margin-right: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  margin-right: 10px;
 }
