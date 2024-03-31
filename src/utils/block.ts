@@ -43,6 +43,20 @@ abstract class Block {
     });
   }
 
+  _removeEvents() {
+    const { events = {} } = this.props;
+
+    if (typeof events === "object" && events !== null) {
+      Object.entries(events).forEach(([key, value]) => {
+        if (this._element) {
+          this._element.removeEventListener(key, value);
+        }
+      });
+    }
+
+    this.props.events = {};
+  }
+
   _registerEvents(eventBus: EventBus) {
     eventBus.on(Block.EVENTS.INIT, this.init.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
@@ -174,6 +188,8 @@ abstract class Block {
     const props = { ...this.props };
     const _tmpId = Math.floor(100000 + Math.random() * 900000);
     const stubs = this._createStubsInComponent(_tmpId);
+
+    this._removeEvents();
 
     //Создаем фрагмент компонента с заглушками и формируем с помощью шаблонизатора
     const fragment = this._createDocumentElement(
