@@ -53,8 +53,6 @@ abstract class Block {
         }
       });
     }
-
-    this.props.events = {};
   }
 
   _registerEvents(eventBus: EventBus) {
