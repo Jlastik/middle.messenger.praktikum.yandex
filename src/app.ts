@@ -1,6 +1,6 @@
 import "./global.pcss";
 import Block from "./utils/block.ts";
-import { router } from "./router.js";
+import { router } from "./router.ts";
 
 function render(query: string, block: Block | null) {
   const root = document.querySelector(query);
