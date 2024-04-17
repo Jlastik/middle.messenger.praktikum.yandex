@@ -98,8 +98,8 @@ abstract class Block {
     oldProps: Record<string, unknown>,
     newProps: Record<string, unknown>,
   ) {
-    const response = this.componentDidUpdate(oldProps, newProps);
-
+    const response = this.__componentDidUpdate(oldProps, newProps);
+    this.componentDidUpdate();
     if (response) {
       const { props, children, lists } = this._getChildrenPropsAndProps({
         ...this.props,
@@ -115,7 +115,7 @@ abstract class Block {
   }
 
   // Может переопределять пользователь, необязательно трогать
-  componentDidUpdate(
+  __componentDidUpdate(
     oldProps: Record<string, unknown>,
     newProps: Record<string, unknown>,
   ) {
@@ -130,6 +130,8 @@ abstract class Block {
     });
     return update;
   }
+
+  componentDidUpdate() {}
 
   setProps = (nextProps: Record<string, unknown>) => {
     if (!nextProps) {
@@ -239,20 +241,6 @@ abstract class Block {
   _createDocumentElement(tagName: string) {
     // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
     return document.createElement(tagName);
-  }
-
-  show() {
-    const el = this.getContent();
-    if (el) {
-      el.style.display = "block";
-    }
-  }
-
-  hide() {
-    const el = this.getContent();
-    if (el) {
-      el.style.display = "none";
-    }
   }
 }
 

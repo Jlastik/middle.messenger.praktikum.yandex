@@ -1,8 +1,10 @@
 import "./auth-page.pcss";
 import Block from "src/utils/block.ts";
 import Button from "src/components/button";
-import AuthForm from "src/components/auth-form";
+import AuthForm, { FormProps } from "src/components/auth-form";
 import { Input, InputGroup } from "src/components/input";
+import { Router } from "../../utils/router.ts";
+import { signIn } from "../../utils/api.ts";
 
 class AuthPage extends Block {
   log: Input;
@@ -22,7 +24,7 @@ class AuthPage extends Block {
       class: "outlined",
       label: "Нет аккаунта?",
       events: {
-        click: () => window.open("/registration", "_self"),
+        click: () => Router.getInstance("#app").go("/sign-up"),
       },
     });
     const loginInput = new Input({
@@ -61,7 +63,10 @@ class AuthPage extends Block {
       class: "auth_form",
       inputs: [loginInputGroup, passInputGroup],
       buttons: [AuthBtn, NoAccBtn],
-      formState: {},
+      formState: {
+        login: "",
+        password: "",
+      },
       events: {
         submit: (e) => this.onSubmit(e),
       },
@@ -69,59 +74,72 @@ class AuthPage extends Block {
 
     super({ form });
 
-    this.log = loginInput;
-    this.pass = passInput;
+    this.log = loginInputGroup;
+    this.pass = passInputGroup;
     this.form = form;
   }
 
   onSubmit(e: Event) {
     e.preventDefault();
-
-    console.log(this.form.props.login);
     let hasError = false;
+    const data = (this.form.props as FormProps).formState;
 
-    const form = e.target as HTMLFormElement;
-    if (form) {
-      const data = new FormData(form);
-      for (const [name, value] of data) {
-        if (name === "login") {
-          if (!value) {
-            hasError = true;
-            this.log.setProps({
-              error: true,
-              errorText: "Логин не может быть пустым",
-            });
-          } else {
-            this.log.setProps({
-              error: false,
-              errorText: "",
-            });
-          }
-        }
-        if (name === "password" && !value) {
-          if (!value) {
-            hasError = true;
-            this.pass.setProps({
-              error: true,
-              errorText: "Пароль не может быть пустым",
-            });
-          } else {
-            this.pass.setProps({
-              error: false,
-              errorText: "",
-            });
-          }
+    Object.entries(data).forEach(([name, value]) => {
+      if (name === "login") {
+        if (!value) {
+          hasError = true;
+          this.log.setProps({
+            error: true,
+            errorText: "Логин не может быть пустым",
+          });
+        } else {
+          this.log.setProps({
+            error: false,
+            errorText: "",
+          });
         }
       }
+      if (name === "password") {
+        if (!value) {
+          hasError = true;
+          this.pass.setProps({
+            error: true,
+            errorText: "Пароль не может быть пустым",
+          });
+        } else {
+          this.pass.setProps({
+            error: false,
+            errorText: "",
+          });
+        }
+      }
+    });
 
-      !hasError && window.open("/home", "_self");
+    if (!hasError) {
+      signIn({
+        login: data.login,
+        password: data.password,
+      }).then((r) => {
+        if (r) {
+          Router.getInstance("#app").go("/messenger");
+        }
+      });
+    } else {
+      console.log("Поля заполнены неверно");
     }
   }
 
   onChange(e: Event, name: string) {
     const input = e.target as HTMLInputElement;
-    this.form.setProps({ [name]: input.value });
+    const formState = this.form.props.formState as Record<string, string>;
+    this.form.setProps({
+      formState: {
+        ...formState,
+        [name]: input.value,
+      },
+    });
   }
+
   render() {
     return `
         <div class="auth_wrapper">

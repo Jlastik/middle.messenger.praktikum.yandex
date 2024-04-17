@@ -3,6 +3,7 @@ import Block, { BlockPropsType } from "src/utils/block.ts";
 import { ProfileAvatar } from "src/components/profile-avatar";
 import { ProfileForm } from "src/components/profile-form";
 import Button from "src/components/button";
+import { ProfileBackBtn } from "../../components/profile-back-btn";
 
 type ProfilePageProps = {
   name: string;
@@ -16,6 +17,7 @@ class ProfilePage extends Block {
   changePwdBtn;
   exitBtn;
   saveBtn;
+  backBtn;
 
   isEdit: boolean;
 
@@ -51,6 +53,9 @@ class ProfilePage extends Block {
         click: () => this.onChangeEditStatus(false),
       },
     });
+
+    const backBtn = new ProfileBackBtn();
+
     const form = new ProfileForm({
       events: {
         submit: (e: Event) => this.onSubmit(e),
@@ -65,6 +70,7 @@ class ProfilePage extends Block {
       saveBtn: saveBtn,
       form: form,
       isEdit: false,
+      backBtn: backBtn,
       ...props,
     });
 
@@ -75,6 +81,7 @@ class ProfilePage extends Block {
     this.exitBtn = exitBtn;
     this.saveBtn = saveBtn;
     this.isEdit = false;
+    this.backBtn = backBtn;
   }
 
   onChangeEditStatus(state: boolean) {
@@ -92,9 +99,7 @@ class ProfilePage extends Block {
   render() {
     return `
         <main class="profile_container">
-          <section id="profile_back_container" class="profile_back_container">
-            <img src="/img/back-btn.png" alt="back" />
-          </section>
+          {{{ this.backBtn }}}
           <section class="profile_content_container">
             <div class="profile_content">
               {{{ avatar }}}

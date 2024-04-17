@@ -1,9 +1,9 @@
 import Block, { BlockPropsType } from "src/utils/block.ts";
 
 type ButtonProps = {
-  id: string;
+  id?: string;
   type: "submit" | "reset" | "button";
-  class: "solid" | "outlined" | "error";
+  class: "solid" | "outlined" | "error" | "light";
   label: string;
 };
 export default class Button extends Block {
@@ -11,6 +11,6 @@ export default class Button extends Block {
     super(props);
   }
   render() {
-    return `<button id="{{id}}" type="{{type}}" class="{{class}}">{{label}}</button>`;
+    return `<button id="{{#if id}}id{{/if}}" type="{{type}}" class="{{class}}">{{{label}}}</button>`;
   }
 }

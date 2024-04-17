@@ -1,6 +1,7 @@
 import { Input, InputGroup } from "../../components/input";
 import Button from "../../components/button";
 import { EventType } from "../../utils/block.ts";
+import { Router } from "../../utils/router.ts";
 
 export const FirstName = (e: EventType) =>
   new InputGroup({
@@ -94,7 +95,7 @@ export const REG_BUTTONS = {
     class: "outlined",
     label: "Войти",
     events: {
-      click: () => window.open("/", "_self"),
+      click: () => Router.getInstance("#app").go("/"),
     },
   }),
 };

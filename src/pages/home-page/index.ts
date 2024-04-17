@@ -6,11 +6,14 @@ import { ChatItem } from "src/components/chat-item";
 import { Message } from "src/components/message";
 import { MessagesHeader } from "src/components/messages-header";
 import { MessageInput } from "src/components/message-input";
-import { CHAT_LIST, MESSAGE_LIST } from "./const.ts";
+import { MESSAGE_LIST } from "./const.ts";
+import { getChats, getUser, UserType } from "../../utils/api.ts";
+import store from "../../utils/store.ts";
 
 type HomePageProps = { chatList: ChatItem[]; messageList: Message[] };
 
 class HomePage extends Block {
+  messagesHeader;
   constructor(props: BlockPropsType & HomePageProps) {
     const chatHeader = new ChatHeader({
       userImage: "/img/avatar.jpg",
@@ -29,18 +32,52 @@ class HomePage extends Block {
       messageInput: messageInput,
       ...props,
     });
+
+    this.messagesHeader = messagesHeader;
   }
 
-  ChatList = CHAT_LIST.map((el) => new ChatItem(el));
   MessageList = MESSAGE_LIST.map((el) => new Message(el));
 
-  componentDidMount() {
-    setTimeout(() => {
+  async componentDidMount() {
+    let currentUser = store.getState().user as UserType;
+
+    if (!currentUser) {
+      const user = await getUser();
+      if (user) {
+        currentUser = user;
+        store.dispatch({
+          type: "SET_USER",
+          payload: user,
+        });
+      }
+    }
+    const chats = await getChats();
+    if (chats) {
+      const chatList = chats.map(
+        (el) =>
+          new ChatItem({
+            ...el,
+            events: {
+              click: () => {
+                store.dispatch({
+                  type: "SELECT_CHAT",
+                  payload: el.id,
+                });
+              },
+            },
+          }),
+      );
+
       this.setProps({
-        chatList: this.ChatList,
+        chatList: chatList,
         messageList: this.MessageList,
       });
-    }, 1500);
+    }
+
+    this.messagesHeader.setProps({
+      avatar: currentUser.avatar,
+      name: currentUser.first_name,
+    });
   }
 
   render() {
