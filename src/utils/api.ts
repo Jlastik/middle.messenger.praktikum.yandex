@@ -166,3 +166,19 @@ export const searchUser = (data: { login: string }) => {
     }
   });
 };
+
+export const changeUserPassword = (data: {
+  newPassword: string;
+  oldPassword: string;
+}) => {
+  return request
+    .put<string | { reason: string }>("/user/password", { data: data })
+    .then((r) => {
+      if (r.status === 200) {
+        return r.data;
+      } else {
+        console.log(r);
+        return r.data;
+      }
+    });
+};

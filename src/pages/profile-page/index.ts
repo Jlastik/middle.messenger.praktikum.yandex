@@ -5,14 +5,24 @@ import { ProfileForm } from "src/components/profile-form";
 import Button from "src/components/button";
 import { ProfileBackBtn } from "../../components/profile-back-btn";
 import store from "../../utils/store.ts";
-import { getUser, logOut, UserType } from "../../utils/api.ts";
+import {
+  changeUserPassword,
+  getUser,
+  logOut,
+  UserType,
+} from "../../utils/api.ts";
 import { Router } from "../../utils/router.ts";
+import { Input, InputGroup } from "../../components/input";
 
 type ProfilePageProps = {
   name: string;
 };
 
 class ProfilePage extends Block {
+  oldPassword;
+  newPassword;
+  newPwdGroup;
+
   constructor(props: BlockPropsType & ProfilePageProps) {
     const avatar = new ProfileAvatar();
     const changePwdBtn = new Button({
@@ -40,17 +50,42 @@ class ProfilePage extends Block {
       class: "solid",
       label: "Сохранить",
       events: {
-        click: () => this.onChangeEditStatus(false),
+        click: () => this.changePwd(),
       },
+    });
+
+    const oldPwd = new Input({
+      name: "oldPassword",
+      placeholder: "Текущий пароль",
+      class: "",
+      events: {
+        input: (e) => (this.oldPassword = (e.target as HTMLInputElement).value),
+      },
+    });
+    const oldPwdGroup = new InputGroup({
+      name: "oldPassword",
+      label: "",
+      error: false,
+      errorText: "",
+      input: oldPwd,
+    });
+    const newPwd = new Input({
+      name: "newPassword",
+      placeholder: "Новый пароль",
+      events: {
+        input: (e) => (this.newPassword = (e.target as HTMLInputElement).value),
+      },
+    });
+    const newPwdGroup = new InputGroup({
+      name: "newPassword",
+      label: "",
+      error: false,
+      errorText: "",
+      input: newPwd,
     });
 
     const backBtn = new ProfileBackBtn();
-
-    const form = new ProfileForm({
-      events: {
-        submit: (e: Event) => this.onSubmit(e),
-      },
-    });
+    const form = new ProfileForm();
 
     super({
       avatar: avatar,
@@ -60,8 +95,14 @@ class ProfilePage extends Block {
       form: form,
       isEdit: false,
       backBtn: backBtn,
+      oldPwd: oldPwdGroup,
+      newPwd: newPwdGroup,
       ...props,
     });
+
+    this.oldPassword = "";
+    this.newPassword = "";
+    this.newPwdGroup = newPwdGroup;
   }
 
   async handleLogout() {
@@ -71,6 +112,24 @@ class ProfilePage extends Block {
     }
   }
 
+  async changePwd() {
+    const res = await changeUserPassword({
+      oldPassword: this.oldPassword,
+      newPassword: this.newPassword,
+    });
+    if (typeof res === "string") {
+      this.newPwdGroup.setProps({
+        error: false,
+        errorText: "",
+      });
+      this.onChangeEditStatus(false);
+    } else {
+      this.newPwdGroup.setProps({
+        error: true,
+        errorText: res.reason,
+      });
+    }
+  }
   onChangeEditStatus(state: boolean) {
     this.setProps({
       isEdit: state,
@@ -105,7 +164,10 @@ class ProfilePage extends Block {
               {{{ avatar }}}
               <p class="profile_name">{{this.name}}</p>
               {{#if this.isEdit}}
-                <div>Pass</div>
+                <div>
+                  {{{oldPwd}}}
+                  {{{newPwd}}}
+                </div>
               {{else}}
                 {{{ form }}}
               {{/if}}   

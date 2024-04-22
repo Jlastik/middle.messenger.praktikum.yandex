@@ -1,4 +1,4 @@
-import Block, { BlockPropsType } from "src/utils/block.ts";
+import Block from "src/utils/block.ts";
 import { PROFILE_DATA } from "./const.ts";
 import { ProfileFormItem } from "../profile-form-item";
 import { validateByName } from "src/utils/inputValidation.ts";
@@ -6,9 +6,8 @@ import store from "../../utils/store.ts";
 import { editUser, UserType } from "../../utils/api.ts";
 
 export class ProfileForm extends Block {
-  constructor(props: BlockPropsType) {
+  constructor() {
     super({
-      ...props,
       inputs: [],
     });
 
@@ -39,7 +38,7 @@ export class ProfileForm extends Block {
   }
 
   render() {
-    //Формба без сабмита, данные изменяются при изменении поля. Валидация по блюру
+    //Формба без сабмита, данные изменяются при изменении поля. Валидация и запрос на изменение по блюру
     return `<form id="profile_data" class="profile_data">{{{ this.inputs }}}</form>`;
   }
 }
