@@ -4,31 +4,17 @@ import { ProfileAvatar } from "src/components/profile-avatar";
 import { ProfileForm } from "src/components/profile-form";
 import Button from "src/components/button";
 import { ProfileBackBtn } from "../../components/profile-back-btn";
+import store from "../../utils/store.ts";
+import { getUser, logOut, UserType } from "../../utils/api.ts";
+import { Router } from "../../utils/router.ts";
 
 type ProfilePageProps = {
   name: string;
 };
 
 class ProfilePage extends Block {
-  name: string;
-  form: ProfileForm;
-
-  editBtn;
-  changePwdBtn;
-  exitBtn;
-  saveBtn;
-  backBtn;
-
-  isEdit: boolean;
-
   constructor(props: BlockPropsType & ProfilePageProps) {
     const avatar = new ProfileAvatar();
-    const editBtn = new Button({
-      id: "profile_edit_btn",
-      type: "button",
-      class: "solid",
-      label: "Редактировать",
-    });
     const changePwdBtn = new Button({
       id: "",
       type: "button",
@@ -43,7 +29,11 @@ class ProfilePage extends Block {
       type: "button",
       class: "error",
       label: "Выйти",
+      events: {
+        click: () => this.handleLogout(),
+      },
     });
+
     const saveBtn = new Button({
       id: "profile_save_btn",
       type: "submit",
@@ -64,7 +54,6 @@ class ProfilePage extends Block {
 
     super({
       avatar: avatar,
-      editBtn: editBtn,
       changePwdBtn: changePwdBtn,
       exitBtn: exitBtn,
       saveBtn: saveBtn,
@@ -73,20 +62,16 @@ class ProfilePage extends Block {
       backBtn: backBtn,
       ...props,
     });
+  }
 
-    this.name = props.name;
-    this.form = form;
-    this.editBtn = editBtn;
-    this.changePwdBtn = changePwdBtn;
-    this.exitBtn = exitBtn;
-    this.saveBtn = saveBtn;
-    this.isEdit = false;
-    this.backBtn = backBtn;
+  async handleLogout() {
+    const res = await logOut();
+    if (res) {
+      Router.getInstance("#app").go("/");
+    }
   }
 
   onChangeEditStatus(state: boolean) {
-    console.log(state);
-    console.log(this.props);
     this.setProps({
       isEdit: state,
     });
@@ -94,6 +79,21 @@ class ProfilePage extends Block {
 
   onSubmit(e: Event) {
     console.log(e);
+  }
+
+  async componentDidMount() {
+    let currentUser = store.getState().user as UserType;
+
+    if (!currentUser) {
+      const user = await getUser();
+      if (user) {
+        currentUser = user;
+        store.dispatch({
+          type: "SET_USER",
+          payload: user,
+        });
+      }
+    }
   }
 
   render() {
@@ -104,15 +104,19 @@ class ProfilePage extends Block {
             <div class="profile_content">
               {{{ avatar }}}
               <p class="profile_name">{{this.name}}</p>
-              {{{ form }}}
-              <div id="profile_controllers" class="profile_controllers">
               {{#if this.isEdit}}
-                  {{{ this.editBtn }}}
-                  {{{ this.saveBtn }}}
+                <div>Pass</div>
               {{else}}
-                  {{{ this.changePwdBtn }}}
-                  {{{ this.exitBtn }}}
-              {{/if}}       
+                {{{ form }}}
+              {{/if}}   
+              <div id="profile_controllers" class="profile_controllers">
+                {{#if this.isEdit}}
+                    {{{ this.editBtn }}}
+                    {{{ this.saveBtn }}}
+                {{else}}
+                    {{{ this.changePwdBtn }}}
+                    {{{ this.exitBtn }}}
+                {{/if}}       
               </div>
             </div>
           </section>

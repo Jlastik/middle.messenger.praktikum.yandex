@@ -5,6 +5,7 @@ import store from "./store.ts";
 type SignInResponse = { id: number };
 
 export type UserType = {
+  [x: string]: string | number;
   id: number;
   first_name: string;
   second_name: string;
@@ -84,6 +85,19 @@ export const getUser = () => {
   });
 };
 
+export const editUser = (data: { key: keyof UserType; value: string }) => {
+  return request
+    .put<UserType>("/user/profile", { data: { [data.key]: data.value } })
+    .then((r) => {
+      if (r.status === 200) {
+        return r.data;
+      } else {
+        console.log(r);
+        return null;
+      }
+    });
+};
+
 export const getChats = () => {
   return request.get<ChatType[]>("/chats").then((r) => {
     if (r.status === 200) {
@@ -97,6 +111,53 @@ export const getChats = () => {
 
 export const createChat = (data: { title: string }) => {
   return request.post<{ id: number }>("/chats", { data: data }).then((r) => {
+    if (r.status === 200) {
+      return r.data;
+    } else {
+      console.log(r);
+      return null;
+    }
+  });
+};
+
+export const addUsersToChat = (data: { users: number[]; chatId: number }) => {
+  return request.put<string>("/chats/users", { data: data }).then((r) => {
+    if (r.status === 200) {
+      return r.data;
+    } else {
+      console.log(r);
+      return null;
+    }
+  });
+};
+
+export const deleteUserFromChat = (data: {
+  users: number[];
+  chatId: number;
+}) => {
+  return request.delete<string>("/chats/users", { data: data }).then((r) => {
+    if (r.status === 200) {
+      return r.data;
+    } else {
+      console.log(r);
+      return null;
+    }
+  });
+};
+
+export const getChatUsers = (data: { id: number }) => {
+  return request.get<UserType[]>(`/chats/${data.id}/users`).then((r) => {
+    if (r.status === 200) {
+      return r.data;
+    } else {
+      console.log(r);
+      return null;
+    }
+  });
+};
+
+export const searchUser = (data: { login: string }) => {
+  return request.post<UserType[]>("/user/search", { data: data }).then((r) => {
     if (r.status === 200) {
       return r.data;
     } else {

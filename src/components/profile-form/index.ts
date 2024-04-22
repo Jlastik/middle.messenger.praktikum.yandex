@@ -2,27 +2,39 @@ import Block, { BlockPropsType } from "src/utils/block.ts";
 import { PROFILE_DATA } from "./const.ts";
 import { ProfileFormItem } from "../profile-form-item";
 import { validateByName } from "src/utils/inputValidation.ts";
+import store from "../../utils/store.ts";
+import { editUser, UserType } from "../../utils/api.ts";
 
 export class ProfileForm extends Block {
-  inputs: ProfileFormItem[];
   constructor(props: BlockPropsType) {
-    const inputs = PROFILE_DATA.map(
-      (el) =>
-        new ProfileFormItem({
-          ...el,
-          onBlur: (value, name) => this.onBlur(value, name),
-        }),
-    );
     super({
       ...props,
-      inputs: inputs,
+      inputs: [],
     });
-    this.inputs = inputs;
+
+    store.subscribe((s) => {
+      if (s.user) {
+        const data = PROFILE_DATA.map((el) => {
+          const val = (s.user as UserType)[el.name] as string;
+          return new ProfileFormItem({
+            label: el.label,
+            name: el.name,
+            value: val,
+            disabled: el.disabled,
+            onBlur: (value, name) => this.onBlur(value, name),
+          });
+        });
+        this.setProps({ inputs: data });
+      }
+    });
   }
 
-  onBlur(value: string, name: string) {
+  async onBlur(value: string, name: string) {
     if (!validateByName(value, name)) {
       console.log("Неправильный формат данных");
+    } else {
+      const res = await editUser({ value: value, key: name });
+      console.log(res);
     }
   }
 

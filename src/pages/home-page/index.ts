@@ -9,6 +9,7 @@ import { MessageInput } from "src/components/message-input";
 import { MESSAGE_LIST } from "./const.ts";
 import { getChats, getUser, UserType } from "../../utils/api.ts";
 import store from "../../utils/store.ts";
+import { ChatMenu } from "../../components/chat-menu";
 
 type HomePageProps = { chatList: ChatItem[]; messageList: Message[] };
 
@@ -18,18 +19,27 @@ class HomePage extends Block {
     const chatHeader = new ChatHeader({
       userImage: "/img/avatar.jpg",
     });
-    const searchInput = new SearchInputForm();
+    const searchInput = new SearchInputForm({
+      handleChange: (v) => {
+        console.log(v);
+      },
+      handleSubmit: (v) => {
+        console.log(v);
+      },
+    });
     const messagesHeader = new MessagesHeader({
       avatar: "/img/avatar.jpg",
       name: "Ибрагим",
     });
     const messageInput = new MessageInput();
 
+    const chatMenu = new ChatMenu();
     super({
       chatHeader: chatHeader,
       searchInput: searchInput,
       messagesHeader: messagesHeader,
       messageInput: messageInput,
+      chatMenu: chatMenu,
       ...props,
     });
 
@@ -61,7 +71,7 @@ class HomePage extends Block {
               click: () => {
                 store.dispatch({
                   type: "SELECT_CHAT",
-                  payload: el.id,
+                  payload: el,
                 });
               },
             },
@@ -70,7 +80,7 @@ class HomePage extends Block {
 
       this.setProps({
         chatList: chatList,
-        messageList: this.MessageList,
+        // messageList: this.MessageList,
       });
     }
 
@@ -78,6 +88,10 @@ class HomePage extends Block {
       avatar: currentUser.avatar,
       name: currentUser.first_name,
     });
+  }
+
+  componentDidUpdate() {
+    console.log(this.props);
   }
 
   render() {
@@ -97,6 +111,7 @@ class HomePage extends Block {
             </div>
             {{{ messageInput }}}
           </section>
+          {{{chatMenu}}}
         </main>
       `;
   }

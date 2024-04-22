@@ -4,12 +4,14 @@ import { ChatType } from "../../utils/api.ts";
 import store from "../../utils/store.ts";
 
 export class ChatItem extends Block {
-  isSelected: boolean = false;
   constructor(props: BlockPropsType & ChatType) {
-    super(props);
+    super({ ...props, isSelected: false });
 
     store.subscribe((s) => {
-      this.setProps({ isSelected: this.props.id === s.selectedChat });
+      const isSelected = this.props.id === (s.selectedChat as ChatType)?.id;
+      this.setProps({
+        isSelected: isSelected,
+      });
     });
   }
 
@@ -17,11 +19,7 @@ export class ChatItem extends Block {
     console.log(store.getState());
   }
 
-  componentDidMount() {
-    store.subscribe((s) => {
-      console.log(s);
-    });
-  }
+  componentDidMount() {}
 
   render() {
     return `

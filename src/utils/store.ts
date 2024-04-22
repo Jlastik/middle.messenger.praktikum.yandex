@@ -36,6 +36,15 @@ const reducer = (state: Indexed, action: Action) => {
     case "SELECT_CHAT":
       newState.selectedChat = action.payload;
       return newState;
+    case "TOGGLE_CHAT_MENU":
+      newState.isChatMenuOpen = !newState.isChatMenuOpen;
+      return newState;
+    case "SET_MENU_LIST":
+      newState.isMenuSearch = false;
+      return newState;
+    case "SET_MENU_SEARCH":
+      newState.isMenuSearch = true;
+      return newState;
     case "CLEAR_STORE":
       return {};
     default:
@@ -43,6 +52,12 @@ const reducer = (state: Indexed, action: Action) => {
   }
 };
 
-const store = Object.freeze(createStore(reducer, {}));
+const store = Object.freeze(
+  createStore(reducer, {
+    user: null,
+    selectedChat: null,
+    isChatMenuOpen: false,
+  }),
+);
 
 export default store;

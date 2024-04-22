@@ -1,15 +1,17 @@
 import { EventBus } from "./event-bus.ts";
 import Handlebars from "handlebars";
+import { deepCompare } from "./utils.ts";
 
 export type EventType = Record<string, (e: Event) => void>;
 export type BlockPropsType = {
-  events?: Record<string, (e: Event) => void>;
-} & Record<string, unknown>;
+  [x: string]: unknown;
+  events?: EventType;
+};
 
 abstract class Block {
-  props: BlockPropsType;
-  lists: Record<string, unknown[]>;
-  children: Record<string, Block>;
+  props;
+  lists;
+  children;
   eventBus: () => EventBus;
 
   static EVENTS = {
@@ -73,9 +75,9 @@ abstract class Block {
   componentDidMount() {}
 
   _getChildrenPropsAndProps(propsWithChildren: BlockPropsType) {
-    const children: Record<string, Block> = {};
+    const children: { [x: string]: Block } = {};
     const props: BlockPropsType = {};
-    const lists: Record<string, unknown[]> = {};
+    const lists: { [x: string]: Block[] } = {};
 
     Object.entries(propsWithChildren).forEach(([key, value]) => {
       if (value instanceof Block) {
@@ -99,8 +101,8 @@ abstract class Block {
     newProps: Record<string, unknown>,
   ) {
     const response = this.__componentDidUpdate(oldProps, newProps);
-    this.componentDidUpdate();
     if (response) {
+      this.componentDidUpdate();
       const { props, children, lists } = this._getChildrenPropsAndProps({
         ...this.props,
         ...this.lists,
@@ -115,25 +117,13 @@ abstract class Block {
   }
 
   // Может переопределять пользователь, необязательно трогать
-  __componentDidUpdate(
-    oldProps: Record<string, unknown>,
-    newProps: Record<string, unknown>,
-  ) {
-    let update = false;
-    if (Object.keys(oldProps).length !== Object.keys(newProps).length) {
-      update = true;
-    }
-    Object.entries(oldProps).forEach(([key, value]) => {
-      if (newProps[key] !== value || typeof newProps[key] === "undefined") {
-        update = true;
-      }
-    });
-    return update;
+  __componentDidUpdate(oldProps: BlockPropsType, newProps: BlockPropsType) {
+    return !deepCompare(oldProps, newProps);
   }
 
   componentDidUpdate() {}
 
-  setProps = (nextProps: Record<string, unknown>) => {
+  setProps = (nextProps: BlockPropsType) => {
     if (!nextProps) {
       return;
     }
@@ -151,7 +141,7 @@ abstract class Block {
       stubs[key] = `<div data-id="__l_${id}"></div>`;
     });
     Object.entries(this.children).forEach(([key, child]) => {
-      stubs[key] = `<div data-id="${child._id}"></div>`;
+      stubs[key] = `<div data-id="${(child as Block)._id}"></div>`;
     });
 
     return stubs;
