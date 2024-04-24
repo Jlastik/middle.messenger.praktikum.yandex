@@ -182,3 +182,27 @@ export const changeUserPassword = (data: {
       }
     });
 };
+
+export const getChatToken = (id: number) => {
+  return request.post<{ token: string }>(`/chats/token/${id}`).then((r) => {
+    if (r.status === 200) {
+      return r.data;
+    } else {
+      console.log(r);
+      return r.data;
+    }
+  });
+};
+
+export const updateUserAvatar = (data: FormData) => {
+  return request
+    .put<{ token: string }>(`/user/profile/avatar`, { data: data })
+    .then((r) => {
+      if (r.status === 200) {
+        return r.data;
+      } else {
+        console.log(r);
+        return r.data;
+      }
+    });
+};

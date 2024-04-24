@@ -1,4 +1,4 @@
-import { queryStringify } from "./utils.ts";
+import { isObject, queryStringify } from "./utils.ts";
 import { BASE_PATH } from "../const.ts";
 
 const METHODS = {
@@ -12,7 +12,7 @@ type OptionsType = {
   timeout?: number;
   headers?: Record<string, string>;
   method?: string;
-  data?: Record<string, unknown>;
+  data?: unknown;
 };
 
 type HTTPMethod = <Res>(
@@ -37,7 +37,7 @@ export class HTTPTransport {
     );
   };
 
-  put: HTTPMethod = (url, options = {}) => {
+  put: HTTPMethod = (url, options: OptionsType = {}) => {
     return this.request(
       url,
       { ...options, method: METHODS.PUT },
@@ -70,7 +70,10 @@ export class HTTPTransport {
 
       xhr.open(
         method,
-        BASE_PATH + (isGet && !!data ? `${url}${queryStringify(data)}` : url),
+        BASE_PATH +
+          (isGet && !!data && isObject(data)
+            ? `${url}${queryStringify(data)}`
+            : url),
       );
 
       Object.keys(headers).forEach((key) => {
@@ -101,6 +104,8 @@ export class HTTPTransport {
 
       if (isGet || !data) {
         xhr.send();
+      } else if (data instanceof FormData) {
+        xhr.send(data);
       } else {
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(JSON.stringify(data));

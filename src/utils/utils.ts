@@ -1,7 +1,7 @@
-const isObject = (value: unknown): value is Record<string, unknown> =>
+export const isObject = (value: unknown): value is Record<string, unknown> =>
   Object.prototype.toString.call(value) === "[object Object]";
 
-const isArray = (value: unknown): value is Array<unknown> =>
+export const isArray = (value: unknown): value is Array<unknown> =>
   Array.isArray(value);
 
 type StringIndexed = Record<string, unknown>;

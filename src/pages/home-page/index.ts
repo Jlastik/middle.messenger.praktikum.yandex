@@ -7,7 +7,7 @@ import { Message } from "src/components/message";
 import { MessagesHeader } from "src/components/messages-header";
 import { MessageInput } from "src/components/message-input";
 import { MESSAGE_LIST } from "./const.ts";
-import { getChats, getUser, UserType } from "../../utils/api.ts";
+import { getChats, getChatToken, getUser, UserType } from "../../utils/api.ts";
 import store from "../../utils/store.ts";
 import { ChatMenu } from "../../components/chat-menu";
 
@@ -68,10 +68,11 @@ class HomePage extends Block {
           new ChatItem({
             ...el,
             events: {
-              click: () => {
+              click: async () => {
+                const { token } = await getChatToken(el.id);
                 store.dispatch({
                   type: "SELECT_CHAT",
-                  payload: el,
+                  payload: { ...el, token: token },
                 });
               },
             },
