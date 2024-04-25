@@ -24,6 +24,10 @@ app.get("/profile", (_, res) => {
   res.status(200).sendFile(resolve(__dirname, `../build/index.html`));
 });
 
+app.get("/sign-up", (_, res) => {
+  res.status(200).sendFile(resolve(__dirname, `../build/index.html`));
+});
+
 app.listen(PORT, function () {
   console.log(`Мессенджер был успешно запущен на порту ${PORT}!`);
 });
