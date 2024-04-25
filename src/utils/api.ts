@@ -16,12 +16,24 @@ export type UserType = {
   email: string;
 };
 
+export type MessageType = {
+  id: number;
+  user_id: number;
+  chat_id: number;
+  type: string;
+  time: string;
+  content: string;
+  is_read: boolean;
+  file: string | null;
+};
+
 export type ChatType = {
   id: number;
   title: string;
   avatar: string;
   unread_count: number;
   created_by: number;
+  token: string;
   last_message: {
     user: Omit<UserType, "id" | "display_name">;
     time: string;

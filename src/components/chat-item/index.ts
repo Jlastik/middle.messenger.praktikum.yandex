@@ -34,21 +34,21 @@ export class ChatItem extends Block {
                     <p class="chat_content_sender">{{this.title}}</p>
                     <p class="chat_content_time">
                       {{#if this.last_message}}
-                          this.last_message.time
+                          {{this.last_message.time}}
                       {{/if}}
                     </p>
                 </div>
                 <div class="chat_content_bottom">
                     <p class="chat_content_message">
                         {{#if this.last_message}}
-                            this.last_message.content
+                            {{this.last_message.content}}
                         {{else}}
                             Нет сообщений
                         {{/if}}
                     </p>
                     {{#if this.last_message}}
                       <div class="unread_indicator">
-                          <span>this.unread_count</span>
+                          <span>{{this.unread_count}}</span>
                       </div> 
                     {{/if}}
                 </div>

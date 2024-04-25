@@ -137,8 +137,8 @@ abstract class Block {
   _createStubsInComponent(id: number) {
     const stubs: Record<string, string> = {};
 
-    Object.entries(this.lists).forEach(([key]) => {
-      stubs[key] = `<div data-id="__l_${id}"></div>`;
+    Object.entries(this.lists).forEach(([key], i) => {
+      stubs[key] = `<div data-id="__l_${id}-${i}"></div>`;
     });
     Object.entries(this.children).forEach(([key, child]) => {
       stubs[key] = `<div data-id="${(child as Block)._id}"></div>`;
@@ -157,12 +157,13 @@ abstract class Block {
     });
 
     //Заменяем заглушки списков отрендереными компонентами
-    Object.entries(this.lists).forEach((item) => {
+    Object.entries(this.lists).forEach(([listName, listValue], i) => {
       const listCont = this._createDocumentElement(
         "template",
       ) as HTMLTemplateElement;
 
-      item[1].forEach((listItem) => {
+      console.log(listName);
+      listValue.forEach((listItem) => {
         if (listItem instanceof Block) {
           const el = listItem.getContent();
           el && listCont.content.append(el);
@@ -170,10 +171,17 @@ abstract class Block {
           listCont.content.append(`${listItem}`);
         }
       });
-      const stub = fragment.content.querySelector(`[data-id="__l_${id}"]`);
+      const stub = fragment.content.querySelector(`[data-id="__l_${id}-${i}"]`);
       stub && stub.replaceWith(listCont.content);
     });
   }
+
+  setAttribute(attr: Record<string, string>) {
+    Object.entries(attr).forEach(([key, value]) => {
+      this._element?.setAttribute(key, value);
+    });
+  }
+
   _render() {
     const props = { ...this.props };
     const _tmpId = Math.floor(100000 + Math.random() * 900000);
