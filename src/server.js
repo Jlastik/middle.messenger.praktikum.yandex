@@ -23,8 +23,10 @@ app.get("/registration", (_, res) => {
 app.get("/profile", (_, res) => {
   res.status(200).sendFile(resolve(__dirname, `../build/index.html`));
 });
-
 app.get("/sign-up", (_, res) => {
+  res.status(200).sendFile(resolve(__dirname, `../build/index.html`));
+});
+app.get("/settings", (_, res) => {
   res.status(200).sendFile(resolve(__dirname, `../build/index.html`));
 });
 
