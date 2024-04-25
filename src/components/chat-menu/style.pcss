@@ -1,0 +1,102 @@
+.chat_menu_container {
+    width: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.chat_menu_container.open {
+    width: 800px;
+    padding: 10px 20px;
+    box-shadow: 0 0 4px 8px #eee;
+}
+
+.users_search_result_container {
+    overflow: auto;
+    height: calc(100% - 57px);
+}
+
+.search_tab {
+    height: calc(100% - 50px);
+}
+
+.chat_menu_tabs {
+    display: flex;
+    width: 100%;
+
+    p {
+        transition: all .3s;
+        width: 50%;
+        text-align: center;
+        cursor: pointer;
+        padding: 10px;
+        background-color: var(--gray-100);
+
+        &:hover {
+            background-color: var(--gray-300);
+        }
+
+        &.active {
+            color: #fff;
+            background-color: var(--gray-500);
+        }
+
+        &:first-of-type {
+            border-radius: 8px 0 0 0;
+
+        }
+
+        &:last-of-type {
+            border-radius: 0 8px 0 0;
+        }
+    }
+}
+
+.user_item {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-flow: row nowrap;
+    padding: 4px 6px;
+    transition: all 0.3s;
+
+    &:hover {
+        background-color: var(--gray-50);
+
+        .user_item_add_icon {
+            stroke: var(--gray-900);
+        }
+
+        .user_item_delete_icon {
+            stroke: var(--red-500);
+        }
+
+    }
+
+    &_info {
+        flex-grow: 1;
+        margin: 0 6px;
+
+        p:first-of-type {
+            color: var(--gray-800)
+        }
+
+        p:last-of-type {
+            color: var(--gray-500)
+        }
+    }
+
+    &_avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50px;
+        object-fit: cover;
+        overflow: hidden;
+    }
+
+    &_add_icon, &_delete_icon {
+        stroke: var(--gray-500);
+    }
+}
+

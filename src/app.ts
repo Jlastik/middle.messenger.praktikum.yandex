@@ -1,20 +1,15 @@
 import "./global.pcss";
-import Block from "./utils/block.ts";
-import { router } from "./router.js";
+import { Router } from "./utils/router.ts";
+import AuthPage from "./pages/auth-page";
+import RegPage from "./pages/reg-page";
+import HomePage from "./pages/home-page";
+import ProfilePage from "./pages/profile-page";
 
-function render(query: string, block: Block | null) {
-  const root = document.querySelector(query);
-  const element = block?.getContent();
-  if (root && element) {
-    root.appendChild(element);
-    //Зачем?
-    block && block.dispatchComponentDidMount();
-  }
-  return root;
-}
+const router = Router.getInstance("#app");
 
-const currentPath = window.location.pathname;
-
-console.log(currentPath);
-
-render("#app", router.find((el) => el.path === currentPath)?.element || null);
+router
+  .use("/", AuthPage)
+  .use("/sign-up", RegPage)
+  .use("/messenger", HomePage)
+  .use("/settings", ProfilePage)
+  .start();

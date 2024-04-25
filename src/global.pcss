@@ -8,7 +8,7 @@
   --red-200: #ffeaea;
   --red-100: #fff4f4;
   --gray-50: rgb(241 245 249 / 30%);
-  --gray-100: #f1f5f9;
+  --gray-100: #f3f6ff;
   --gray-200: #e2e8f0;
   --gray-300: #cbd5e1;
   --gray-400: #94a3b8;
@@ -117,6 +117,22 @@ button.outlined {
     background-color: var(--blue-200);
   }
 }
+
+button.light {
+
+  background-color: transparent;
+  color: var(--blue-500);
+  padding: 6px 8px;
+
+  &:hover {
+    background-color: var(--blue-100);
+  }
+
+  &:active {
+    background-color: var(--blue-200);
+  }
+}
+
 
 button.error {
   background-color: white;

@@ -1,6 +1,6 @@
 import "./reg-page.pcss";
 import Block from "src/utils/block.ts";
-import AuthForm from "src/components/auth-form";
+import AuthForm, { FormProps } from "src/components/auth-form";
 import {
   emailValidation,
   FORM_ERRORS,
@@ -18,6 +18,8 @@ import {
   REG_BUTTONS,
   SecondName,
 } from "./const.ts";
+import { Router } from "../../utils/router.ts";
+import { signUp } from "../../utils/api.ts";
 
 class RegPage extends Block {
   signInBtn;
@@ -140,10 +142,12 @@ class RegPage extends Block {
       this.phone.setProps({ error: false, errorText: "" });
     }
 
-    if (hasErrors) {
-      console.log("Поля заполнены неверно");
-    } else {
-      console.log(this.form.props.formState);
+    if (!hasErrors) {
+      signUp((this.form.props as FormProps).formState).then((r) => {
+        if (r) {
+          Router.getInstance("#app").go("/messenger");
+        }
+      });
     }
   }
 

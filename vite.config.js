@@ -6,16 +6,16 @@ export default defineConfig({
   build: {
     target: "es2017",
     outDir: "build",
-    rollupOptions: {
-      input: {
-        auth: "index.html",
-        main: "home.html",
-        registration: "registration.html",
-        profile: "profile.html",
-        error: "error.html",
-        notfound: "notfound.html",
-      },
-    },
+    // rollupOptions: {
+    //   input: {
+    //     auth: "index.html",
+    //     main: "home.html",
+    //     registration: "registration.html",
+    //     profile: "profile.html",
+    //     error: "error.html",
+    //     notfound: "notfound.html",
+    //   },
+    // },
   },
   preview: {
     port: 3000,
