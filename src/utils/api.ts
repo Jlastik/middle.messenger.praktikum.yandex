@@ -2,7 +2,7 @@ import request from "./request.ts";
 import { Router } from "./router.ts";
 import store from "./store.ts";
 
-type SignInResponse = { id: number };
+type SignInResponse = { id: number; reason?: string };
 
 export type UserType = {
   [x: string]: string | number;
@@ -66,6 +66,9 @@ export const signIn = (data: { login: string; password: string }) => {
         return true;
       } else {
         console.log(r);
+        if (r.data.reason === "User already in system") {
+          Router.getInstance("#app").go("/messenger");
+        }
         return null;
       }
     });
