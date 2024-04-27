@@ -42,7 +42,7 @@
         }
 
         &:first-of-type {
-            border-radius: 8px 0 0 0;
+            border-radius: 8px 0 0;
 
         }
 
@@ -60,6 +60,10 @@
     flex-flow: row nowrap;
     padding: 4px 6px;
     transition: all 0.3s;
+
+    &_add_icon, &_delete_icon {
+        stroke: var(--gray-500);
+    }
 
     &:hover {
         background-color: var(--gray-50);
@@ -93,10 +97,6 @@
         border-radius: 50px;
         object-fit: cover;
         overflow: hidden;
-    }
-
-    &_add_icon, &_delete_icon {
-        stroke: var(--gray-500);
     }
 }
 

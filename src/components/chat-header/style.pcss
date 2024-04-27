@@ -1,119 +1,119 @@
 .chats_header_container {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .settings_menu_list {
-  padding: 12px 20px;
+    padding: 12px 20px;
 }
 
 .settings_menu {
-  position: absolute;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.66);
-  display: none;
-  &.open {
-    display: block;
-  }
+    position: absolute;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(0 0 0 / 66%);
+    display: none;
+
+    &.open {
+        display: block;
+    }
 }
 
 .add_group_wrapper {
-  position: absolute;
-  z-index: 1000;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(0, 0, 0, 0.66);
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(0 0 0 / 66%);
 
-  &.create_open {
-    display: flex;
-  }
-}
-.add_group_container {
-  width: 500px;
-  border-radius: 8px;
-  background-color: #fff;
-  padding: 20px 40px;
-  flex-flow: column nowrap;
-  align-items: center;
-  justify-content: center;
-
-  .dialog_title {
-    font-size: 20px;
-    margin-bottom: 10px;
-  }
-  .input_group {
-    margin-bottom: 26px;
-  }
-
-  button:not(:last-of-type) {
-    margin-top: 10px;
-  }
-  input, button {
-    width: 100%;
-  }
+    &.create_open {
+        display: flex;
+    }
 }
 
 .settings_menu_container {
-  display: flex;
-  flex-flow: column nowrap;
-  width: 300px;
-  height: 100vh;
-  background-color: #fff;
+    display: flex;
+    flex-flow: column nowrap;
+    width: 300px;
+    height: 100vh;
+    background-color: #fff;
 
-  button {
-    width: 100%;
-    text-align: left;
+    button {
+        width: 100%;
+        text-align: left;
 
-    &:not(:last-of-type) {
-      margin-bottom: 10px;
+        &:not(:last-of-type) {
+            margin-bottom: 10px;
+        }
     }
-  }
+}
+
+.add_group_container {
+    width: 500px;
+    border-radius: 8px;
+    background-color: #fff;
+    padding: 20px 40px;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+
+    .dialog_title {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .input_group {
+        margin-bottom: 26px;
+    }
+
+    button:not(:last-of-type) {
+        margin-top: 10px;
+    }
 }
 
 .chats_header {
-  flex-grow: 1;
-  position: relative;
-  cursor: pointer;
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  padding: 4px;
-  transition: all 0.25s;
-  border-radius: 10px;
-  color: var(--gray-500);
-  margin-left: 6px;
-
-  &:hover {
-    background-color: var(--gray-100);
-  }
-
-  & > p::after {
-    content: "->";
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
+    flex-grow: 1;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    padding: 4px;
     transition: all 0.25s;
-    opacity: 0;
-  }
+    border-radius: 10px;
+    color: var(--gray-500);
+    margin-left: 6px;
 
-  &:hover p::after {
-    opacity: 1;
-  }
+    &:hover {
+        background-color: var(--gray-100);
+    }
+
+    & > p::after {
+        content: "->";
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: all 0.25s;
+        opacity: 0;
+    }
+
+    &:hover p::after {
+        opacity: 1;
+    }
 }
 
 .user_avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  margin-right: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    margin-right: 10px;
 }

@@ -119,11 +119,15 @@ class AuthPage extends Block {
       signIn({
         login: data.login,
         password: data.password,
-      }).then((r) => {
-        if (r) {
-          Router.getInstance("#app").go("/messenger");
-        }
-      });
+      })
+        .then((r) => {
+          if (r) {
+            Router.getInstance("#app").go("/messenger");
+          }
+        })
+        .catch((e) => {
+          console.log(e.data.reason);
+        });
     } else {
       console.log("Поля заполнены неверно");
     }
