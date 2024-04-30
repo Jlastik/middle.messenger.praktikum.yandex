@@ -10,7 +10,9 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "start": "tsc && vite build && node src/server.js"
+    "start": "tsc && vite build && node src/server.js",
+    "stylelint": "npx stylelint \"**/*.pcss\" --fix",
+    "eslint": "npx eslint"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",

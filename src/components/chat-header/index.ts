@@ -4,7 +4,8 @@ import { Router } from "../../utils/router.ts";
 import Button from "../button";
 import CloseBtn from "../close-btn";
 import { AddGroupDialog } from "./add-group-dialog.ts";
-import { logOut } from "../../utils/api.ts";
+import { logOut, UserType } from "../../utils/api.ts";
+import store from "../../utils/store.ts";
 
 class Settings extends Block {
   addGroupDialog;
@@ -91,18 +92,27 @@ class Settings extends Block {
 }
 
 class Profile extends Block {
-  constructor(props: { userImage: string }) {
+  constructor() {
     super({
-      ...props,
+      user: null,
       events: { click: () => Router.getInstance("#app").go("/settings") },
+    });
+
+    store.subscribe((s) => {
+      const user = s.user as UserType;
+      this.setProps({ user: user });
     });
   }
 
   render() {
     return `
       <div id="chats_header_user" class="chats_header"> 
-        <img class="user_avatar" src="{{this.userImage}}" alt="avatar" />
-        <p>Андрей</p>
+        <img 
+            class="user_avatar"
+            src="{{#if this.user.avatar}}https://ya-praktikum.tech/api/v2/resources{{this.user.avatar}} {{else}} /img/no-image.png {{/if}}" 
+            alt="avatar" 
+        />
+        <p>{{{this.user.first_name}}}</p>
       </div>
     `;
   }
@@ -111,7 +121,7 @@ class Profile extends Block {
 export class ChatHeader extends Block {
   constructor(props: BlockPropsType & { userImage: string }) {
     const settings = new Settings();
-    const profile = new Profile({ userImage: props.userImage });
+    const profile = new Profile();
     super({
       ...props,
       settings: settings,

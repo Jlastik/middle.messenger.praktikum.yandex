@@ -26,7 +26,7 @@ export class ChatItem extends Block {
         <div class="chat_item{{#if this.isSelected}} selected{{/if}}">
             <img 
                 class="chat_avatar"
-                src="{{#if this.avatar}} this.avatar {{else}} /img/no-image.png {{/if}}"
+                src="{{#if this.avatar}}https://ya-praktikum.tech/api/v2/resources{{this.avatar}} {{else}} /img/no-image.png {{/if}}" 
                 alt="chat-avatar" 
             />
             <div class="chat_item_content">
