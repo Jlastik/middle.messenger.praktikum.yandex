@@ -76,10 +76,13 @@ class HomePage extends Block {
               if (res) {
                 store.dispatch({ type: "SET_PARTICIPANT_LIST", payload: res });
               }
-              const { token } = await getChatToken(el.id);
-              store.dispatch({
-                type: "SELECT_CHAT",
-                payload: { ...el, token: token },
+              getChatToken(el.id).then((r) => {
+                if (r) {
+                  store.dispatch({
+                    type: "SELECT_CHAT",
+                    payload: { ...el, token: r.token },
+                  });
+                }
               });
             },
           },
