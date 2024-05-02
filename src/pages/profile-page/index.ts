@@ -125,7 +125,7 @@ class ProfilePage extends Block {
         errorText: "",
       });
       this.onChangeEditStatus(false);
-    } else {
+    } else if (res && res.reason) {
       this.newPwdGroup.setProps({
         error: true,
         errorText: res.reason,
