@@ -53,7 +53,8 @@ export const signUp = (data: { [x: string]: string }) => {
         console.log(r);
         return null;
       }
-    });
+    })
+    .catch((e) => console.log(e));
 };
 
 export const signIn = (data: { login: string; password: string }) => {
@@ -71,33 +72,40 @@ export const signIn = (data: { login: string; password: string }) => {
         }
         return null;
       }
-    });
+    })
+    .catch((e) => console.log(e));
 };
 
 export const logOut = () => {
-  return request.post("/auth/logout").then((r) => {
-    if (r.status === 200) {
-      return true;
-    } else {
-      console.log(r);
-      return null;
-    }
-  });
+  return request
+    .post("/auth/logout")
+    .then((r) => {
+      if (r.status === 200) {
+        return true;
+      } else {
+        console.log(r);
+        return null;
+      }
+    })
+    .catch((e) => console.log(e));
 };
 
 export const getUser = () => {
-  return request.get<UserType>("/auth/user").then((r) => {
-    if (r.status === 200) {
-      return r.data;
-    } else {
-      if (r.status === 401) {
-        Router.getInstance("#app").go("/");
-        store.dispatch({ type: "CLEAR_STORE" });
+  return request
+    .get<UserType>("/auth/user")
+    .then((r) => {
+      if (r.status === 200) {
+        return r.data;
+      } else {
+        if (r.status === 401) {
+          Router.getInstance("#app").go("/");
+          store.dispatch({ type: "CLEAR_STORE" });
+        }
+        console.log(r);
+        return null;
       }
-      console.log(r);
-      return null;
-    }
-  });
+    })
+    .catch((e) => console.log(e));
 };
 
 export const editUser = (data: { key: keyof UserType; value: string }) => {
@@ -110,76 +118,95 @@ export const editUser = (data: { key: keyof UserType; value: string }) => {
         console.log(r);
         return null;
       }
-    });
+    })
+    .catch((e) => console.log(e));
 };
 
 export const getChats = () => {
-  return request.get<ChatType[]>("/chats").then((r) => {
-    if (r.status === 200) {
-      return r.data;
-    } else {
-      console.log(r);
-      return null;
-    }
-  });
+  return request
+    .get<ChatType[]>("/chats")
+    .then((r) => {
+      if (r.status === 200) {
+        return r.data;
+      } else {
+        console.log(r);
+        return null;
+      }
+    })
+    .catch((e) => console.log(e));
 };
 
 export const createChat = (data: { title: string }) => {
-  return request.post<{ id: number }>("/chats", { data: data }).then((r) => {
-    if (r.status === 200) {
-      return r.data;
-    } else {
-      console.log(r);
-      return null;
-    }
-  });
+  return request
+    .post<{ id: number }>("/chats", { data: data })
+    .then((r) => {
+      if (r.status === 200) {
+        return r.data;
+      } else {
+        console.log(r);
+        return null;
+      }
+    })
+    .catch((e) => console.log(e));
 };
 
 export const addUsersToChat = (data: { users: number[]; chatId: number }) => {
-  return request.put<string>("/chats/users", { data: data }).then((r) => {
-    if (r.status === 200) {
-      return r.data;
-    } else {
-      console.log(r);
-      return null;
-    }
-  });
+  return request
+    .put<string>("/chats/users", { data: data })
+    .then((r) => {
+      if (r.status === 200) {
+        return r.data;
+      } else {
+        console.log(r);
+        return null;
+      }
+    })
+    .catch((e) => console.log(e));
 };
 
 export const deleteUserFromChat = (data: {
   users: number[];
   chatId: number;
 }) => {
-  return request.delete<string>("/chats/users", { data: data }).then((r) => {
-    if (r.status === 200) {
-      return r.data;
-    } else {
-      console.log(r);
-      return null;
-    }
-  });
+  return request
+    .delete<string>("/chats/users", { data: data })
+    .then((r) => {
+      if (r.status === 200) {
+        return r.data;
+      } else {
+        console.log(r);
+        return null;
+      }
+    })
+    .catch((e) => console.log(e));
 };
 
 export const getChatUsers = (data: { id: number }) => {
-  return request.get<UserType[]>(`/chats/${data.id}/users`).then((r) => {
-    if (r.status === 200) {
-      return r.data;
-    } else {
-      console.log(r);
-      return null;
-    }
-  });
+  return request
+    .get<UserType[]>(`/chats/${data.id}/users`)
+    .then((r) => {
+      if (r.status === 200) {
+        return r.data;
+      } else {
+        console.log(r);
+        return null;
+      }
+    })
+    .catch((e) => console.log(e));
 };
 
 export const searchUser = (data: { login: string }) => {
-  return request.post<UserType[]>("/user/search", { data: data }).then((r) => {
-    if (r.status === 200) {
-      return r.data;
-    } else {
-      console.log(r);
-      return null;
-    }
-  });
+  return request
+    .post<UserType[]>("/user/search", { data: data })
+    .then((r) => {
+      if (r.status === 200) {
+        return r.data;
+      } else {
+        console.log(r);
+        return null;
+      }
+    })
+    .catch((e) => console.log(e));
 };
 
 export const changeUserPassword = (data: {
@@ -195,18 +222,22 @@ export const changeUserPassword = (data: {
         console.log(r);
         return r.data;
       }
-    });
+    })
+    .catch((e) => console.log(e));
 };
 
 export const getChatToken = (id: number) => {
-  return request.post<{ token: string }>(`/chats/token/${id}`).then((r) => {
-    if (r.status === 200) {
-      return r.data;
-    } else {
-      console.log(r);
-      return r.data;
-    }
-  });
+  return request
+    .post<{ token: string }>(`/chats/token/${id}`)
+    .then((r) => {
+      if (r.status === 200) {
+        return r.data;
+      } else {
+        console.log(r);
+        return r.data;
+      }
+    })
+    .catch((e) => console.log(e));
 };
 
 export const updateUserAvatar = (data: FormData) => {
@@ -219,5 +250,6 @@ export const updateUserAvatar = (data: FormData) => {
         console.log(r);
         return r.data;
       }
-    });
+    })
+    .catch((e) => console.log(e));
 };

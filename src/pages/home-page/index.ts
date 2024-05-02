@@ -6,11 +6,11 @@ import { ChatItem } from "src/components/chat-item";
 import { Message } from "src/components/message";
 import { MessagesHeader } from "src/components/messages-header";
 import { MessageInput } from "src/components/message-input";
-import { MESSAGE_LIST } from "./const.ts";
 import {
   ChatType,
   getChats,
   getChatToken,
+  getChatUsers,
   getUser,
   MessageType,
   UserType,
@@ -36,10 +36,7 @@ class HomePage extends Block {
         console.log(v);
       },
     });
-    const messagesHeader = new MessagesHeader({
-      avatar: "/img/avatar.jpg",
-      name: "Ибрагим",
-    });
+    const messagesHeader = new MessagesHeader();
     const messageInput = new MessageInput({ onSend: (v) => this.onSend(v) });
 
     const chatMenu = new ChatMenu();
@@ -58,6 +55,43 @@ class HomePage extends Block {
     store.subscribe((s) => {
       const chat = s.selectedChat as ChatType;
       const user = s.user as UserType;
+      const chats = s.chatList as ChatType[];
+
+      const chatList = chats.map((el) => {
+        let data = el;
+        if (el.last_message) {
+          data = {
+            ...data,
+            last_message: {
+              ...data.last_message,
+              time: new Date(data.last_message.time).toLocaleString(),
+            },
+          };
+        }
+        return new ChatItem({
+          ...data,
+          events: {
+            click: async () => {
+              const res = await getChatUsers({ id: el.id });
+              if (res) {
+                store.dispatch({ type: "SET_PARTICIPANT_LIST", payload: res });
+              }
+              getChatToken(el.id).then((r) => {
+                if (r) {
+                  store.dispatch({
+                    type: "SELECT_CHAT",
+                    payload: { ...el, token: r.token },
+                  });
+                }
+              });
+            },
+          },
+        });
+      });
+
+      this.setProps({
+        chatList: chatList,
+      });
       if (chat && user) {
         this.socket = new WebSocket(
           `wss://ya-praktikum.tech/ws/chats/${user.id}/${chat.id}/${chat.token}`,
@@ -77,40 +111,39 @@ class HomePage extends Block {
         this.socket.addEventListener("message", (e) => {
           console.log(e);
           if (e.type === "message") {
-            const messages = JSON.parse(e.data);
-            if (isArray(messages)) {
-              const messagesComp = (messages as MessageType[]).map((mes) => {
-                return new Message({
-                  text: mes.content,
-                  date_send: new Date(mes.time).toLocaleString(),
-                  is_right: false,
-                });
-              });
-              this.setProps({
-                messageList: messagesComp,
-              });
-            } else {
-              this.setProps({
-                messageList: [
-                  new Message({
-                    text: messages.content,
-                    date_send: new Date(messages.time).toLocaleString(),
+            try {
+              const messages = JSON.parse(e.data);
+              if (isArray(messages)) {
+                const messagesComp = (messages as MessageType[]).map((mes) => {
+                  return new Message({
+                    text: mes.content,
+                    date_send: new Date(mes.time).toLocaleString(),
                     is_right: false,
-                  }),
-                  ...this.lists.messageList,
-                ],
-              });
+                  });
+                });
+                this.setProps({
+                  messageList: messagesComp,
+                });
+              } else {
+                this.setProps({
+                  messageList: [
+                    new Message({
+                      text: messages.content,
+                      date_send: new Date(messages.time).toLocaleString(),
+                      is_right: false,
+                    }),
+                    ...this.lists.messageList,
+                  ],
+                });
+              }
+            } catch (e) {
+              console.log(e);
             }
-          } else {
-            console.log(e);
           }
         });
       }
     });
   }
-
-  MessageList = MESSAGE_LIST.map((el) => new Message(el));
-
   onSend(v: string) {
     this.socket?.send(
       JSON.stringify({
@@ -134,45 +167,13 @@ class HomePage extends Block {
     }
     const chats = await getChats();
     if (chats) {
-      const chatList = chats.map((el) => {
-        let data = el;
-        if (el.last_message) {
-          data = {
-            ...data,
-            last_message: {
-              ...data.last_message,
-              time: new Date(data.last_message.time).toLocaleString(),
-            },
-          };
-        }
-        return new ChatItem({
-          ...data,
-          events: {
-            click: async () => {
-              const { token } = await getChatToken(el.id);
-              store.dispatch({
-                type: "SELECT_CHAT",
-                payload: { ...el, token: token },
-              });
-            },
-          },
-        });
-      });
-
-      this.setProps({
-        chatList: chatList,
-        messageList: this.MessageList,
-      });
+      store.dispatch({ type: "SET_CHAT_LIST", payload: chats });
     }
 
     this.messagesHeader.setProps({
       avatar: currentUser.avatar,
       name: currentUser.first_name,
     });
-  }
-
-  componentDidUpdate() {
-    console.log("Update: ", this.lists);
   }
 
   render() {

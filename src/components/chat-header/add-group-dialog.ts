@@ -1,8 +1,8 @@
 import Block, { BlockPropsType } from "../../utils/block.ts";
 import Button from "../button";
 import { Input, InputGroup } from "../input";
-import { createChat } from "../../utils/api.ts";
-import { Router } from "../../utils/router.ts";
+import { createChat, getChats } from "../../utils/api.ts";
+import store from "../../utils/store.ts";
 
 export class AddGroupDialog extends Block {
   title;
@@ -75,7 +75,6 @@ export class AddGroupDialog extends Block {
         error: true,
         errorText: "Поле не может быть пустым",
       });
-
       return;
     }
 
@@ -83,7 +82,10 @@ export class AddGroupDialog extends Block {
 
     if (newChat?.id) {
       this.setProps({ isCreateGroupOpen: false });
-      Router.getInstance("#app").reload();
+      const chats = await getChats();
+      if (chats) {
+        store.dispatch({ type: "SET_CHAT_LIST", payload: chats });
+      }
     }
   }
 

@@ -32,7 +32,12 @@ export class User extends Block {
     const chat = store.getState().selectedChat as ChatType;
     const user = this.props.user as UserType;
     if (chat && user) {
-      addUsersToChat({ users: [user.id], chatId: chat.id });
+      addUsersToChat({ users: [user.id], chatId: chat.id }).then(async () => {
+        const res = await getChatUsers({ id: chat.id });
+        if (res) {
+          store.dispatch({ type: "SET_PARTICIPANT_LIST", payload: res });
+        }
+      });
     }
   }
 
@@ -40,7 +45,14 @@ export class User extends Block {
     const chat = store.getState().selectedChat as ChatType;
     const user = this.props.user as UserType;
     if (chat && user) {
-      deleteUserFromChat({ users: [user.id], chatId: chat.id });
+      deleteUserFromChat({ users: [user.id], chatId: chat.id }).then(
+        async () => {
+          const res = await getChatUsers({ id: chat.id });
+          if (res) {
+            store.dispatch({ type: "SET_PARTICIPANT_LIST", payload: res });
+          }
+        },
+      );
     }
   }
 
@@ -99,12 +111,17 @@ export class TabList extends Block {
   constructor() {
     super({
       isActive: true,
-      events: { click: () => store.dispatch({ type: "SET_MENU_LIST" }) },
+      events: {
+        click: async () => {
+          store.dispatch({ type: "SET_MENU_LIST" });
+        },
+      },
     });
     store.subscribe((s) => {
       this.setProps({ isMenuSearch: s.isMenuSearch });
     });
   }
+
   render() {
     return `<p class="{{#unless this.isMenuSearch}}active{{/unless}}">Участники</p>`;
   }
@@ -135,18 +152,23 @@ export class ChatMenu extends Block {
     });
 
     store.subscribe((s) => {
+      const participants = s.participants as UserType[];
+      const participIds = participants.map((el) => el.id);
+      const searchList = (s.searchList as UserType[]).filter((el) => {
+        return !participIds.includes(el.id);
+      });
       this.setProps({
         isOpen: s.isChatMenuOpen,
         isMenuSearch: s.isMenuSearch,
       });
-      if (s.isMenuSearch) {
-        this.setProps({
-          searchRes: [],
-          participantList: [],
-        });
-      } else {
-        this.showParticipants(s);
-      }
+      this.setProps({
+        participantList: participants.map(
+          (el) => new User({ user: el, isParticipant: true }),
+        ),
+        searchRes: searchList.map(
+          (el) => new User({ user: el, isParticipant: false }),
+        ),
+      });
     });
 
     this.searchTab = searchTab;
@@ -156,26 +178,7 @@ export class ChatMenu extends Block {
   async handleSearchUsers(v: string) {
     const res = await searchUser({ login: v });
     if (res) {
-      this.setProps({
-        searchRes: res.map(
-          (el) => new User({ user: el, isParticipant: false }),
-        ),
-        participantList: [],
-      });
-    }
-  }
-
-  async showParticipants(s: Record<string, unknown>) {
-    const chat = s.selectedChat as ChatType;
-    if (chat) {
-      const res = await getChatUsers({ id: chat.id });
-      res &&
-        this.setProps({
-          participantList: res.map(
-            (el) => new User({ user: el, isParticipant: true }),
-          ),
-          searchRes: [],
-        });
+      store.dispatch({ type: "SET_SEARCH_LIST", payload: res });
     }
   }
 

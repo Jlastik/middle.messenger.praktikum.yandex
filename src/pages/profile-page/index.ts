@@ -14,16 +14,12 @@ import {
 import { Router } from "../../utils/router.ts";
 import { Input, InputGroup } from "../../components/input";
 
-type ProfilePageProps = {
-  name: string;
-};
-
 class ProfilePage extends Block {
   oldPassword;
   newPassword;
   newPwdGroup;
 
-  constructor(props: BlockPropsType & ProfilePageProps) {
+  constructor(props: BlockPropsType) {
     const avatar = new ProfileAvatar();
     const changePwdBtn = new Button({
       id: "",
@@ -43,7 +39,6 @@ class ProfilePage extends Block {
         click: () => this.handleLogout(),
       },
     });
-
     const saveBtn = new Button({
       id: "profile_save_btn",
       type: "submit",
@@ -53,7 +48,6 @@ class ProfilePage extends Block {
         click: () => this.changePwd(),
       },
     });
-
     const oldPwd = new Input({
       name: "oldPassword",
       placeholder: "Текущий пароль",
@@ -83,7 +77,6 @@ class ProfilePage extends Block {
       errorText: "",
       input: newPwd,
     });
-
     const backBtn = new ProfileBackBtn();
     const form = new ProfileForm();
 
@@ -98,6 +91,15 @@ class ProfilePage extends Block {
       oldPwd: oldPwdGroup,
       newPwd: newPwdGroup,
       ...props,
+    });
+
+    store.subscribe((s) => {
+      const user = s.user as UserType | null;
+      if (user) {
+        this.setProps({
+          name: user.first_name,
+        });
+      }
     });
 
     this.oldPassword = "";
@@ -123,7 +125,7 @@ class ProfilePage extends Block {
         errorText: "",
       });
       this.onChangeEditStatus(false);
-    } else {
+    } else if (res && res.reason) {
       this.newPwdGroup.setProps({
         error: true,
         errorText: res.reason,
@@ -134,10 +136,6 @@ class ProfilePage extends Block {
     this.setProps({
       isEdit: state,
     });
-  }
-
-  onSubmit(e: Event) {
-    console.log(e);
   }
 
   async componentDidMount() {

@@ -3,11 +3,6 @@ import Block, { BlockPropsType } from "src/utils/block.ts";
 import store from "../../utils/store.ts";
 import { ChatType } from "../../utils/api.ts";
 
-type MessagesHeaderProps = {
-  avatar: string;
-  name: string;
-};
-
 class ChatSettings extends Block {
   constructor(props: BlockPropsType) {
     super(props);
@@ -19,12 +14,11 @@ class ChatSettings extends Block {
 }
 
 export class MessagesHeader extends Block {
-  constructor(props: BlockPropsType & MessagesHeaderProps) {
+  constructor() {
     const chatSettings = new ChatSettings({
       events: { click: () => this.handleClickMenu() },
     });
     super({
-      ...props,
       chat: null,
       isMenuOpen: false,
       chatSettings: chatSettings,
@@ -47,7 +41,7 @@ export class MessagesHeader extends Block {
           <div class="messages_header_name">
             <img 
               class="chat_avatar"
-              src="{{#if this.chat.avatar}} this.chat.avatar {{else}} /img/no-image.png {{/if}}" 
+              src="{{#if this.chat.avatar}}https://ya-praktikum.tech/api/v2/resources{{this.chat.avatar}} {{else}} /img/no-image.png {{/if}}" 
               alt="avatar" 
             />
             <p>{{this.chat.title}}</p>

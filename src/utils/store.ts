@@ -22,7 +22,14 @@ const createStore = (
   };
 };
 
-const deepCopy = (object: Indexed) => JSON.parse(JSON.stringify(object));
+const deepCopy = (object: Indexed) => {
+  try {
+    return JSON.parse(JSON.stringify(object));
+  } catch (e) {
+    console.log(e);
+    return "";
+  }
+};
 
 const reducer = (state: Indexed, action: Action) => {
   const newState = deepCopy(state);
@@ -38,6 +45,15 @@ const reducer = (state: Indexed, action: Action) => {
       return newState;
     case "TOGGLE_CHAT_MENU":
       newState.isChatMenuOpen = !newState.isChatMenuOpen;
+      return newState;
+    case "SET_PARTICIPANT_LIST":
+      newState.participants = action.payload;
+      return newState;
+    case "SET_CHAT_LIST":
+      newState.chatList = action.payload;
+      return newState;
+    case "SET_SEARCH_LIST":
+      newState.searchList = action.payload;
       return newState;
     case "SET_MENU_LIST":
       newState.isMenuSearch = false;
@@ -57,6 +73,9 @@ const store = Object.freeze(
     user: null,
     selectedChat: null,
     isChatMenuOpen: false,
+    participants: [],
+    searchList: [],
+    chatList: [],
   }),
 );
 
