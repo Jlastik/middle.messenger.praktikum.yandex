@@ -14,13 +14,13 @@ app.use(express.static("./build"));
 app.get("/", (_, res) => {
   res.status(200).sendFile(resolve(__dirname, `../build/index.html`));
 });
-app.get("/home", (_, res) => {
+app.get("/messenger", (_, res) => {
   res.status(200).sendFile(resolve(__dirname, `../build/index.html`));
 });
-app.get("/registration", (_, res) => {
+app.get("/sign-up", (_, res) => {
   res.status(200).sendFile(resolve(__dirname, `../build/index.html`));
 });
-app.get("/profile", (_, res) => {
+app.get("/settings", (_, res) => {
   res.status(200).sendFile(resolve(__dirname, `../build/index.html`));
 });
 

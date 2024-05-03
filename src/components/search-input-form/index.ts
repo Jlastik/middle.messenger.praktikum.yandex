@@ -2,29 +2,43 @@ import "./style.pcss";
 import Block from "src/utils/block.ts";
 import { Input } from "../input";
 
+type SearchInputFormProps = {
+  handleChange: (value: string) => void;
+  handleSubmit: (value: string) => void;
+};
+
 export class SearchInputForm extends Block {
-  constructor() {
+  handleChange;
+  handleSubmit;
+  value;
+  constructor({ handleChange, handleSubmit }: SearchInputFormProps) {
     const searchInput = new Input({
       id: "search-input",
       name: "",
       placeholder: "",
       class: "search_input",
       events: {
-        change: (e) => this.onChange((e.target as HTMLInputElement).value),
+        input: (e) => this.onChange((e.target as HTMLInputElement).value),
       },
     });
     super({
       searchInput: searchInput,
+      value: "",
       events: { submit: (e) => this.onSubmit(e) },
     });
+
+    this.handleChange = handleChange;
+    this.handleSubmit = handleSubmit;
+    this.value = "";
   }
 
   onChange(value: string) {
-    console.log(value);
+    this.value = value;
+    this.handleChange(value);
   }
   onSubmit(e: Event) {
     e.preventDefault();
-    console.log("Search chat");
+    this.handleSubmit(this.value);
   }
 
   render() {

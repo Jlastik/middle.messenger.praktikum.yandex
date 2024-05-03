@@ -1,15 +1,17 @@
 import { EventBus } from "./event-bus.ts";
 import Handlebars from "handlebars";
+import { deepCompare } from "./utils.ts";
 
 export type EventType = Record<string, (e: Event) => void>;
 export type BlockPropsType = {
-  events?: Record<string, (e: Event) => void>;
-} & Record<string, unknown>;
+  [x: string]: unknown;
+  events?: EventType;
+};
 
 abstract class Block {
-  props: BlockPropsType;
-  lists: Record<string, unknown[]>;
-  children: Record<string, Block>;
+  props;
+  lists;
+  children;
   eventBus: () => EventBus;
 
   static EVENTS = {
@@ -73,9 +75,9 @@ abstract class Block {
   componentDidMount() {}
 
   _getChildrenPropsAndProps(propsWithChildren: BlockPropsType) {
-    const children: Record<string, Block> = {};
+    const children: { [x: string]: Block } = {};
     const props: BlockPropsType = {};
-    const lists: Record<string, unknown[]> = {};
+    const lists: { [x: string]: Block[] } = {};
 
     Object.entries(propsWithChildren).forEach(([key, value]) => {
       if (value instanceof Block) {
@@ -98,9 +100,9 @@ abstract class Block {
     oldProps: Record<string, unknown>,
     newProps: Record<string, unknown>,
   ) {
-    const response = this.componentDidUpdate(oldProps, newProps);
-
+    const response = this.__componentDidUpdate(oldProps, newProps);
     if (response) {
+      this.componentDidUpdate();
       const { props, children, lists } = this._getChildrenPropsAndProps({
         ...this.props,
         ...this.lists,
@@ -115,23 +117,13 @@ abstract class Block {
   }
 
   // Может переопределять пользователь, необязательно трогать
-  componentDidUpdate(
-    oldProps: Record<string, unknown>,
-    newProps: Record<string, unknown>,
-  ) {
-    let update = false;
-    if (Object.keys(oldProps).length !== Object.keys(newProps).length) {
-      update = true;
-    }
-    Object.entries(oldProps).forEach(([key, value]) => {
-      if (newProps[key] !== value || typeof newProps[key] === "undefined") {
-        update = true;
-      }
-    });
-    return update;
+  __componentDidUpdate(oldProps: BlockPropsType, newProps: BlockPropsType) {
+    return !deepCompare(oldProps, newProps);
   }
 
-  setProps = (nextProps: Record<string, unknown>) => {
+  componentDidUpdate() {}
+
+  setProps = (nextProps: BlockPropsType) => {
     if (!nextProps) {
       return;
     }
@@ -145,11 +137,11 @@ abstract class Block {
   _createStubsInComponent(id: number) {
     const stubs: Record<string, string> = {};
 
-    Object.entries(this.lists).forEach(([key]) => {
-      stubs[key] = `<div data-id="__l_${id}"></div>`;
+    Object.entries(this.lists).forEach(([key], i) => {
+      stubs[key] = `<div data-id="__l_${id}-${i}"></div>`;
     });
     Object.entries(this.children).forEach(([key, child]) => {
-      stubs[key] = `<div data-id="${child._id}"></div>`;
+      stubs[key] = `<div data-id="${(child as Block)._id}"></div>`;
     });
 
     return stubs;
@@ -165,12 +157,13 @@ abstract class Block {
     });
 
     //Заменяем заглушки списков отрендереными компонентами
-    Object.entries(this.lists).forEach((item) => {
+    Object.entries(this.lists).forEach(([listName, listValue], i) => {
       const listCont = this._createDocumentElement(
         "template",
       ) as HTMLTemplateElement;
 
-      item[1].forEach((listItem) => {
+      console.log(listName);
+      listValue.forEach((listItem) => {
         if (listItem instanceof Block) {
           const el = listItem.getContent();
           el && listCont.content.append(el);
@@ -178,10 +171,17 @@ abstract class Block {
           listCont.content.append(`${listItem}`);
         }
       });
-      const stub = fragment.content.querySelector(`[data-id="__l_${id}"]`);
+      const stub = fragment.content.querySelector(`[data-id="__l_${id}-${i}"]`);
       stub && stub.replaceWith(listCont.content);
     });
   }
+
+  setAttribute(attr: Record<string, string>) {
+    Object.entries(attr).forEach(([key, value]) => {
+      this._element?.setAttribute(key, value);
+    });
+  }
+
   _render() {
     const props = { ...this.props };
     const _tmpId = Math.floor(100000 + Math.random() * 900000);
@@ -239,20 +239,6 @@ abstract class Block {
   _createDocumentElement(tagName: string) {
     // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
     return document.createElement(tagName);
-  }
-
-  show() {
-    const el = this.getContent();
-    if (el) {
-      el.style.display = "block";
-    }
-  }
-
-  hide() {
-    const el = this.getContent();
-    if (el) {
-      el.style.display = "none";
-    }
   }
 }
 

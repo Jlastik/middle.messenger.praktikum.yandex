@@ -41,6 +41,7 @@ export const validateByName = (value: string, name: string) => {
   if (name === "phone") {
     return phonedValidation(value);
   }
+  return true;
 };
 
 export const FORM_ERRORS = {

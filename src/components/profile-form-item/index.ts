@@ -13,12 +13,10 @@ export class ProfileFormItem extends Block {
   rowInput;
   constructor(props: BlockPropsType & ProfileFormItemProps) {
     const rowInput = new Input({
-      id: "",
       value: props.value,
       name: props.name,
       placeholder: "",
       disabled: props.disabled,
-      class: "",
       events: {
         blur: (e) =>
           props.onBlur((e.target as HTMLInputElement).value, props.name),

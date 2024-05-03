@@ -4,14 +4,16 @@ import { Input } from "../input";
 
 export class MessageInput extends Block {
   messageInput: Input;
-  constructor() {
+  onSend;
+  value;
+  constructor({ onSend }: { onSend: (v: string) => void }) {
     const messageInput = new Input({
       id: "",
       name: "",
       placeholder: "Cообщение",
       class: "search_input",
       events: {
-        change: (e) => this.onChange((e.target as HTMLInputElement).value),
+        input: (e) => this.onChange((e.target as HTMLInputElement).value),
       },
     });
     super({
@@ -19,19 +21,21 @@ export class MessageInput extends Block {
       events: { submit: (e) => this.onSubmit(e) },
     });
     this.messageInput = messageInput;
+    this.onSend = onSend;
+    this.value = "";
   }
 
   onChange(value: string) {
-    this.messageInput.setProps({
-      value: value,
-    });
+    // this.value = value;
+    (this.messageInput.getContent() as HTMLInputElement).value = value;
   }
   onSubmit(e: Event) {
     e.preventDefault();
-    const val = this.messageInput.props.value as string;
+    const val = (this.messageInput.getContent() as HTMLInputElement).value;
     const reg = /.*\S.*/;
     if (val && val.match(reg)) {
-      console.log("Сообщение отправлено");
+      this.onSend(val);
+      (this.messageInput.getContent() as HTMLInputElement).value = "";
     } else {
       console.log("Сообщение не может быть пустым");
     }

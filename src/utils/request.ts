@@ -1,3 +1,6 @@
+import { isObject, queryStringify } from "./utils.ts";
+import { BASE_PATH } from "../const.ts";
+
 const METHODS = {
   GET: "GET",
   POST: "POST",
@@ -9,20 +12,13 @@ type OptionsType = {
   timeout?: number;
   headers?: Record<string, string>;
   method?: string;
-  data?: Record<string, unknown>;
+  data?: unknown;
 };
 
-type HTTPMethod = (url: string, options?: OptionsType) => Promise<unknown>;
-
-function queryStringify(data: Record<string, unknown>) {
-  if (typeof data !== "object") {
-    throw new Error("Data must be object");
-  }
-  const keys = Object.keys(data);
-  return keys.reduce((result, key, index) => {
-    return `${result}${key}=${data[key]}${index < keys.length - 1 ? "&" : ""}`;
-  }, "?");
-}
+type HTTPMethod = <Res>(
+  url: string,
+  options?: OptionsType,
+) => Promise<{ data: Res; status: number }>;
 
 export class HTTPTransport {
   get: HTTPMethod = (url, options = {}) => {
@@ -41,7 +37,7 @@ export class HTTPTransport {
     );
   };
 
-  put: HTTPMethod = (url, options = {}) => {
+  put: HTTPMethod = (url, options: OptionsType = {}) => {
     return this.request(
       url,
       { ...options, method: METHODS.PUT },
@@ -57,10 +53,13 @@ export class HTTPTransport {
     );
   };
 
-  request = (url: string, options: OptionsType = {}, timeout = 5000) => {
+  request = <Res>(url: string, options: OptionsType = {}, timeout = 5000) => {
     const { headers = {}, method, data } = options;
 
-    return new Promise(function (resolve, reject) {
+    return new Promise<{ data: Res; status: number }>(function (
+      resolve,
+      reject,
+    ) {
       if (!method) {
         reject("No method");
         return;
@@ -69,14 +68,32 @@ export class HTTPTransport {
       const xhr = new XMLHttpRequest();
       const isGet = method === METHODS.GET;
 
-      xhr.open(method, isGet && !!data ? `${url}${queryStringify(data)}` : url);
+      xhr.open(
+        method,
+        BASE_PATH +
+          (isGet && !!data && isObject(data)
+            ? `${url}${queryStringify(data)}`
+            : url),
+      );
 
       Object.keys(headers).forEach((key) => {
         xhr.setRequestHeader(key, headers[key]);
       });
 
+      xhr.withCredentials = true;
       xhr.onload = function () {
-        resolve(xhr);
+        let json: Res;
+
+        try {
+          json = JSON.parse(xhr.response);
+        } catch (e) {
+          json = xhr.response;
+        }
+
+        resolve({
+          data: json,
+          status: xhr.status,
+        });
       };
 
       xhr.onabort = reject;
@@ -87,9 +104,16 @@ export class HTTPTransport {
 
       if (isGet || !data) {
         xhr.send();
+      } else if (data instanceof FormData) {
+        xhr.send(data);
       } else {
+        xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(JSON.stringify(data));
       }
     });
   };
 }
+
+const request = new HTTPTransport();
+
+export default request;

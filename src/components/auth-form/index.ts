@@ -6,7 +6,9 @@ export type FormProps = {
   formLabel: string;
   inputs: Block[];
   buttons: Block[];
-  formState: Record<string, string>;
+  formState: {
+    [x: string]: string;
+  };
   class?: string;
 };
 
